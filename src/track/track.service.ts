@@ -34,28 +34,26 @@ export class TrackService {
   }
 
   update(id: string, updateTrackDto: UpdateTrackDto) {
-    const track = this.tracks.get(id);
+    const track = this.findOne(id);
 
-    if (!track) {
-      throw new NotFoundException('Track not found');
-    }
+    const updatedTrack = this.tracks
+      .set(track.id, {
+        ...track,
+        ...updateTrackDto,
+      })
+      .get(track.id);
 
-    this.tracks.set(track.id, {
-      ...track,
-      ...updateTrackDto,
-    });
-
-    return this.tracks.get(track.id);
+    return updatedTrack;
   }
 
   remove(id: string) {
-    const track = this.tracks.get(id);
+    const isExists = this.tracks.has(id);
 
-    if (!track) {
+    if (!isExists) {
       throw new NotFoundException('Track not found');
     }
 
-    this.tracks.delete(track.id);
+    this.tracks.delete(id);
   }
 
   removeArtistFromTrack(artistId: string) {
@@ -65,6 +63,17 @@ export class TrackService {
       this.tracks.set(track.id, {
         ...track,
         artistId: null,
+      });
+    }
+  }
+
+  removeAlbumFromTrack(albumId: string) {
+    const track = this.findAll().find((track) => track.albumId === albumId);
+
+    if (track) {
+      this.tracks.set(track.id, {
+        ...track,
+        albumId: null,
       });
     }
   }

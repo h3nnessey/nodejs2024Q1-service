@@ -34,27 +34,25 @@ export class ArtistService {
   }
 
   update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artist = this.artists.get(id);
+    const artist = this.findOne(id);
 
-    if (!artist) {
-      throw new NotFoundException('Artist not found');
-    }
+    const updatedArtist = this.artists
+      .set(artist.id, {
+        ...artist,
+        ...updateArtistDto,
+      })
+      .get(artist.id);
 
-    this.artists.set(artist.id, {
-      ...artist,
-      ...updateArtistDto,
-    });
-
-    return this.artists.get(artist.id);
+    return updatedArtist;
   }
 
   remove(id: string) {
-    const artist = this.artists.get(id);
+    const isExists = this.artists.has(id);
 
-    if (!artist) {
+    if (!isExists) {
       throw new NotFoundException('Track not found');
     }
 
-    this.artists.delete(artist.id);
+    this.artists.delete(id);
   }
 }
