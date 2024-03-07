@@ -8,13 +8,11 @@ import {
   Put,
   HttpCode,
   HttpStatus,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
+import { ParseUUIDv4Pipe } from '@/utils/pipes';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { ParseUUIDv4Pipe } from '@/utils/parse-uuidv4-pipe';
 
 @Controller('user')
 export class UserController {
@@ -22,7 +20,6 @@ export class UserController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @UsePipes(new ValidationPipe())
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -41,7 +38,6 @@ export class UserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @UsePipes(new ValidationPipe())
   update(
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,

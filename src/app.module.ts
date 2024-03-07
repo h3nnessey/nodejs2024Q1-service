@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { ParseUUIDv4Pipe } from './utils/parse-uuidv4-pipe';
+import { TrackModule } from './track/track.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, TrackModule],
   controllers: [AppController],
-  providers: [AppService, ParseUUIDv4Pipe],
+  providers: [AppService],
 })
 export class AppModule {}

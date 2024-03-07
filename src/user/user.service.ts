@@ -16,7 +16,7 @@ export class UserService {
   create(createUserDto: CreateUserDto) {
     const dateNow = Date.now();
 
-    const user = {
+    const user: User = {
       id: uuidV4(),
       login: createUserDto.login,
       password: createUserDto.password,
@@ -43,7 +43,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    return plainToClass(User, user);
   }
 
   update(id: string, updatePasswordDto: UpdatePasswordDto) {
