@@ -3,11 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { v4 as uuidV4 } from 'uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
-import { v4 as uuidV4 } from 'uuid';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -46,22 +46,25 @@ export class UserService {
     return plainToClass(User, user);
   }
 
-  update(id: string, updatePasswordDto: UpdatePasswordDto) {
+  update(id: string, { newPassword, oldPassword }: UpdatePasswordDto) {
     const user = this.users.get(id);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    if (user.password !== updatePasswordDto.oldPassword) {
+    if (user.password !== oldPassword) {
       throw new ForbiddenException('Wrong old password');
     }
 
-    user.password = updatePasswordDto.newPassword;
-    user.updatedAt = Date.now();
-    user.version += 1;
+    this.users.set(user.id, {
+      ...user,
+      password: newPassword,
+      updatedAt: Date.now(),
+      version: user.version + 1,
+    });
 
-    return plainToClass(User, user);
+    return plainToClass(User, this.users.get(user.id));
   }
 
   remove(id: string) {
@@ -71,6 +74,6 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    this.users.delete(id);
+    this.users.delete(user.id);
   }
 }

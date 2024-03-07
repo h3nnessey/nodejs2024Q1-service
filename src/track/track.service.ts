@@ -45,7 +45,7 @@ export class TrackService {
       ...updateTrackDto,
     });
 
-    return track;
+    return this.tracks.get(track.id);
   }
 
   remove(id: string) {
@@ -55,6 +55,17 @@ export class TrackService {
       throw new NotFoundException('Track not found');
     }
 
-    this.tracks.delete(id);
+    this.tracks.delete(track.id);
+  }
+
+  removeArtistFromTrack(artistId: string) {
+    const track = this.findAll().find((track) => track.artistId === artistId);
+
+    if (track) {
+      this.tracks.set(track.id, {
+        ...track,
+        artistId: null,
+      });
+    }
   }
 }
