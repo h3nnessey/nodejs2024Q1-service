@@ -1,81 +1,59 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
+import { DatabaseService } from '@/database/database.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UserService {
-  private readonly users = new Map<string, User>();
+  constructor(private readonly db: DatabaseService) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const dateNow = Date.now();
 
-    const user: User = {
+    const user = await this.db.users.create({
       id: uuidV4(),
       login: createUserDto.login,
       password: createUserDto.password,
       version: 1,
       createdAt: dateNow,
       updatedAt: dateNow,
-    };
-
-    this.users.set(user.id, user);
+    });
 
     return plainToClass(User, user);
   }
 
-  findAll() {
-    return Array.from(this.users.values()).map((user) =>
-      plainToClass(User, user),
-    );
+  async findMany() {
+    const users = await this.db.users.findMany();
+
+    return users.map((user) => plainToClass(User, user));
   }
 
-  findOne(id: string) {
-    const user = this.users.get(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  async findOne(id: string) {
+    const user = await this.db.users.findOne(id);
 
     return plainToClass(User, user);
   }
 
-  update(id: string, { newPassword, oldPassword }: UpdatePasswordDto) {
-    const user = this.users.get(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  async update(id: string, { newPassword, oldPassword }: UpdatePasswordDto) {
+    const user = await this.db.users.findOne(id);
 
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Wrong old password');
     }
 
-    const updatedUser = this.users
-      .set(user.id, {
-        ...user,
-        password: newPassword,
-        updatedAt: Date.now(),
-        version: user.version + 1,
-      })
-      .get(user.id);
+    const updatedUser = await this.db.users.update(id, {
+      password: newPassword,
+      updatedAt: Date.now(),
+      version: user.version + 1,
+    });
 
     return plainToClass(User, updatedUser);
   }
 
-  remove(id: string) {
-    const isExists = this.users.has(id);
-
-    if (!isExists) {
-      throw new NotFoundException('User not found');
-    }
-
-    this.users.delete(id);
+  async delete(id: string) {
+    await this.db.users.delete(id);
   }
 }

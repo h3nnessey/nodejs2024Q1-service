@@ -9,54 +9,45 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ParseUUIDv4Pipe } from '@/utils/pipes';
-import { AlbumService } from '@/album/album.service';
-import { TrackService } from '@/track/track.service';
+import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Controller('artist')
 export class ArtistController {
-  constructor(
-    private readonly artistService: ArtistService,
-    private readonly trackService: TrackService,
-    private readonly albumService: AlbumService,
-  ) {}
+  constructor(private readonly artistService: ArtistService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistService.create(createArtistDto);
+  async create(@Body() createArtistDto: CreateArtistDto) {
+    return await this.artistService.create(createArtistDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.artistService.findAll();
+  async findMany() {
+    return await this.artistService.findMany();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
-    return this.artistService.findOne(id);
+  async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
+    return await this.artistService.findOne(id);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
+  async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    return this.artistService.update(id, updateArtistDto);
+    return await this.artistService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDv4Pipe) id: string) {
-    this.trackService.removeArtistFromTrack(id);
-    this.albumService.removeArtistFromAlbum(id);
-
-    return this.artistService.remove(id);
+  async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
+    return await this.artistService.delete(id);
   }
 }

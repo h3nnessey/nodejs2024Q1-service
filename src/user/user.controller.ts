@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ParseUUIDv4Pipe } from '@/utils/pipes';
+import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
@@ -26,28 +26,28 @@ export class UserController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.userService.findAll();
+  async findMany() {
+    return await this.userService.findMany();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
+    return await this.userService.findOne(id);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
+  async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    return this.userService.update(id, updatePasswordDto);
+    return await this.userService.update(id, updatePasswordDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDv4Pipe) id: string) {
-    return this.userService.remove(id);
+  async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
+    return await this.userService.delete(id);
   }
 }

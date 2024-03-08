@@ -1,66 +1,41 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
-import { Album } from './entities/album.entity';
+import { DatabaseService } from '@/database/database.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @Injectable()
 export class AlbumService {
-  private readonly albums = new Map<string, Album>();
+  constructor(private readonly db: DatabaseService) {}
 
-  create(createAlbumDto: CreateAlbumDto) {
-    const album: Album = {
+  async create(createAlbumDto: CreateAlbumDto) {
+    return await this.db.albums.create({
       id: uuidV4(),
       ...createAlbumDto,
-    };
-
-    this.albums.set(album.id, album);
-
-    return album;
+    });
   }
 
-  findAll() {
-    return Array.from(this.albums.values());
+  async findMany() {
+    return await this.db.albums.findMany();
   }
 
-  findOne(id: string) {
-    const album = this.albums.get(id);
-
-    if (!album) {
-      throw new NotFoundException('Album not found');
-    }
-
-    return album;
+  async findOne(id: string) {
+    return this.db.albums.findOne(id);
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const album = this.findOne(id);
-
-    const updatedAlbum = this.albums
-      .set(id, { ...album, ...updateAlbumDto })
-      .get(album.id);
-
-    return updatedAlbum;
+  async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    return await this.db.albums.update(id, updateAlbumDto);
   }
 
-  remove(id: string) {
-    const isExists = this.albums.has(id);
+  async delete(id: string) {
+    const tracks = (await this.db.tracks.findMany()).filter(
+      (track) => track.albumId === id,
+    );
 
-    if (!isExists) {
-      throw new NotFoundException('Album not found');
-    }
+    tracks.forEach(async (track) => {
+      await this.db.tracks.update(track.id, { albumId: null });
+    });
 
-    this.albums.delete(id);
-  }
-
-  removeArtistFromAlbum(artistId: string) {
-    const album = this.findAll().find((album) => album.artistId === artistId);
-
-    if (album) {
-      this.albums.set(album.id, {
-        ...album,
-        artistId: null,
-      });
-    }
+    await this.db.albums.delete(id);
   }
 }

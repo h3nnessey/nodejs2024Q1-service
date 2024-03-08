@@ -1,80 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
+import { DatabaseService } from '@/database/database.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {
-  private readonly tracks = new Map<string, Track>();
+  constructor(private readonly db: DatabaseService) {}
 
-  create(createTrackDto: CreateTrackDto) {
-    const track: Track = {
+  async create(createTrackDto: CreateTrackDto) {
+    return await this.db.tracks.create({
       id: uuidV4(),
       ...createTrackDto,
-    };
-
-    this.tracks.set(track.id, track);
-
-    return track;
+    });
   }
 
-  findAll() {
-    return Array.from(this.tracks.values());
+  async findMany() {
+    return await this.db.tracks.findMany();
   }
 
-  findOne(id: string) {
-    const track = this.tracks.get(id);
-
-    if (!track) {
-      throw new NotFoundException('Track not found');
-    }
-
-    return track;
+  async findOne(id: string) {
+    return await this.db.tracks.findOne(id);
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const track = this.findOne(id);
-
-    const updatedTrack = this.tracks
-      .set(track.id, {
-        ...track,
-        ...updateTrackDto,
-      })
-      .get(track.id);
-
-    return updatedTrack;
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    return await this.db.tracks.update(id, updateTrackDto);
   }
 
-  remove(id: string) {
-    const isExists = this.tracks.has(id);
-
-    if (!isExists) {
-      throw new NotFoundException('Track not found');
-    }
-
-    this.tracks.delete(id);
-  }
-
-  removeArtistFromTrack(artistId: string) {
-    const track = this.findAll().find((track) => track.artistId === artistId);
-
-    if (track) {
-      this.tracks.set(track.id, {
-        ...track,
-        artistId: null,
-      });
-    }
-  }
-
-  removeAlbumFromTrack(albumId: string) {
-    const track = this.findAll().find((track) => track.albumId === albumId);
-
-    if (track) {
-      this.tracks.set(track.id, {
-        ...track,
-        albumId: null,
-      });
-    }
+  async delete(id: string) {
+    await this.db.tracks.delete(id);
   }
 }
