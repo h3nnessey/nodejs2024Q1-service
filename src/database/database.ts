@@ -1,6 +1,10 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { UniqueEntity } from './entities/unique.entity';
 
-export class Database<Entity extends { id: string }> {
+export class Database<Entity extends UniqueEntity> {
   private readonly entities = new Map<string, Entity>();
 
   public async create(entity: Entity): Promise<Entity> {
@@ -19,10 +23,10 @@ export class Database<Entity extends { id: string }> {
     return updatedEntity;
   }
 
-  public async delete(id: string): Promise<void> {
+  public async delete(id: string, skipExistenceCheck = false): Promise<void> {
     const isEntityExists = this.entities.has(id);
 
-    if (!isEntityExists) {
+    if (!isEntityExists && !skipExistenceCheck) {
       throw new NotFoundException();
     }
 
@@ -43,7 +47,9 @@ export class Database<Entity extends { id: string }> {
     return entity;
   }
 
-  public async has(id: string): Promise<boolean> {
-    return this.entities.has(id);
+  public async entityExistenceCheck(id: string): Promise<void> {
+    if (!this.entities.has(id)) {
+      throw new UnprocessableEntityException();
+    }
   }
 }

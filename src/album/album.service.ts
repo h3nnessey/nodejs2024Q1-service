@@ -36,6 +36,7 @@ export class AlbumService {
       await this.db.tracks.update(track.id, { albumId: null });
     });
 
+    await this.db.favorites.albums.delete(id, true);
     await this.db.albums.delete(id);
   }
 }
