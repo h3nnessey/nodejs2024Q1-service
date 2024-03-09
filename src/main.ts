@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { setupSwaggerFromYaml } from '@/config/swagger';
+import { config } from '@/config/env';
 import { AppModule } from './app.module';
-import { setupSwaggerFromYaml } from './config/swagger/';
-import 'dotenv/config';
 
-const PORT = parseInt(process.env.PORT, 10) || 4000;
+const { PORT } = config;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
