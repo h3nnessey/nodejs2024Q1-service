@@ -17,21 +17,21 @@ export class DatabaseService {
     artists: new Database(),
     albums: new Database(),
     findMany: async () => {
-      const [tracksIds, artistsIds, albumsIds] = await Promise.all([
-        this.favorites.tracks.findMany(),
-        this.favorites.artists.findMany(),
-        this.favorites.albums.findMany(),
-      ]);
-
       return {
         tracks: await Promise.all(
-          tracksIds.map(async ({ id }) => await this.tracks.findOne(id)),
+          (await this.favorites.tracks.findMany()).map(({ id }) =>
+            this.tracks.findOne(id),
+          ),
         ),
         artists: await Promise.all(
-          artistsIds.map(async ({ id }) => await this.artists.findOne(id)),
+          (await this.favorites.artists.findMany()).map(({ id }) =>
+            this.artists.findOne(id),
+          ),
         ),
         albums: await Promise.all(
-          albumsIds.map(async ({ id }) => await this.albums.findOne(id)),
+          (await this.favorites.albums.findMany()).map(({ id }) =>
+            this.albums.findOne(id),
+          ),
         ),
       };
     },

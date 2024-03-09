@@ -13,8 +13,6 @@ export class FavoritesService {
   async addTrack(id: string) {
     await this.db.tracks.entityExistenceCheck(id);
     await this.db.favorites.tracks.create({ id });
-
-    return await this.db.favorites.tracks.findMany();
   }
 
   async deleteTrack(trackId: string) {
@@ -24,8 +22,6 @@ export class FavoritesService {
   async addAlbum(id: string) {
     await this.db.albums.entityExistenceCheck(id);
     await this.db.favorites.albums.create({ id });
-
-    return await this.db.favorites.albums.findMany();
   }
 
   async deleteAlbum(albumId: string) {
@@ -35,8 +31,6 @@ export class FavoritesService {
   async addArtist(id: string) {
     await this.db.artists.entityExistenceCheck(id);
     await this.db.favorites.artists.create({ id });
-
-    return await this.db.favorites.artists.findMany();
   }
 
   async deleteArtist(artistId: string) {
