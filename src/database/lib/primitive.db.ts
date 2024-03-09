@@ -1,5 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
-
 export class PrimitiveDatabase<Primitive extends string | number> {
   private primitives: Primitive[] = [];
 
@@ -19,15 +17,5 @@ export class PrimitiveDatabase<Primitive extends string | number> {
 
   public async findMany(): Promise<Primitive[]> {
     return this.primitives;
-  }
-
-  public async findOne(primitive: Primitive): Promise<Primitive> {
-    const index = this.primitives.indexOf(primitive);
-
-    if (index === -1) {
-      throw new NotFoundException();
-    }
-
-    return this.primitives[index];
   }
 }
