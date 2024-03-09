@@ -28,7 +28,7 @@ export class TrackService {
   }
 
   async delete(id: string) {
-    await this.db.favorites.tracks.delete(id, true);
+    await this.db.favorites.tracks.delete(id);
     await this.db.tracks.delete(id);
   }
 }

@@ -2,9 +2,8 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { UniqueEntity } from './entities/unique.entity';
 
-export class Database<Entity extends UniqueEntity> {
+export class EntityDatabase<Entity extends { id: string }> {
   private readonly entities = new Map<string, Entity>();
 
   public async create(entity: Entity): Promise<Entity> {
