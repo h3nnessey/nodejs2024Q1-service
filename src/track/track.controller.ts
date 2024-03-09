@@ -25,19 +25,16 @@ export class TrackController {
   }
 
   @Get()
-  @HttpCode(HttpStatus.OK)
   async findMany() {
     return this.trackService.findMany();
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.trackService.findOne(id);
   }
 
   @Put(':id')
-  @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,

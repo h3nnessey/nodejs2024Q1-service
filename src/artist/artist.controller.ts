@@ -25,19 +25,16 @@ export class ArtistController {
   }
 
   @Get()
-  @HttpCode(HttpStatus.OK)
   async findMany() {
     return await this.artistService.findMany();
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return await this.artistService.findOne(id);
   }
 
   @Put(':id')
-  @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,

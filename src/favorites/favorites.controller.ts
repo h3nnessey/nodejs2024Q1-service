@@ -16,7 +16,6 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  @HttpCode(HttpStatus.OK)
   async findMany(): Promise<FavoritesResponse> {
     return await this.favoritesService.findMany();
   }
