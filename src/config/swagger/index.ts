@@ -1,0 +1,1 @@
+export { setupSwaggerFromYaml } from './setupSwaggerFromYaml';

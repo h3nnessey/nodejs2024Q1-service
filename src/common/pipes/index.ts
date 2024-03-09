@@ -1,1 +1,1 @@
-export { ParseUUIDv4Pipe } from './parse-uuidv4-pipe';
+export { ParseUUIDv4Pipe } from './parseUUIDv4.pipe';
