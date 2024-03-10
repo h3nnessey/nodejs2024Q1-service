@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { UserService } from './user.service';
 import { User } from './entities';
@@ -35,8 +35,32 @@ export class UserController {
   }
 
   @ApiOperation({
+    summary: 'Create new user',
+    description: 'Creates a new user',
+  })
+  @ApiResponse({
+    type: User,
+    description: 'Created user',
+    status: HttpStatus.CREATED,
+  })
+  @ApiResponse({
+    description: 'body does not contain required fields',
+    status: HttpStatus.BAD_REQUEST,
+  })
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
+  }
+
+  @ApiOperation({
     summary: 'Get user by id',
     description: 'Gets user by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     type: User,
@@ -57,27 +81,13 @@ export class UserController {
   }
 
   @ApiOperation({
-    summary: 'Create new user',
-    description: 'Creates a new user',
-  })
-  @ApiResponse({
-    type: User,
-    description: 'Created user',
-    status: HttpStatus.CREATED,
-  })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @ApiOperation({
     summary: 'Update user password by id',
     description: 'Updates user password by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     type: UpdatedUserDto,
@@ -107,6 +117,11 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete user by id',
     description: 'Deletes user by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     description: 'User deleted',

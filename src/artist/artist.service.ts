@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
 import { DatabaseService } from '@/database/database.service';
-import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
+import { CreateArtistDto, UpdateArtistDto } from './dto';
 
 @Injectable()
 export class ArtistService {
@@ -16,15 +15,15 @@ export class ArtistService {
   }
 
   async findMany() {
-    return await this.db.artists.findMany();
+    return this.db.artists.findMany();
   }
 
   async findOne(id: string) {
-    return await this.db.artists.findOne(id);
+    return this.db.artists.findOne(id);
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    return await this.db.artists.update(id, updateArtistDto);
+    return this.db.artists.update(id, updateArtistDto);
   }
 
   async delete(id: string) {

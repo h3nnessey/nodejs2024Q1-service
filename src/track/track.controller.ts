@@ -9,10 +9,10 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { TrackService } from './track.service';
-import { CreateTrackDto, UpdateTrackDto, UpdatedTrackDto } from './dto';
+import { CreateTrackDto, UpdateTrackDto } from './dto';
 import { Track } from './entities';
 
 @ApiTags('Tracks')
@@ -35,8 +35,32 @@ export class TrackController {
   }
 
   @ApiOperation({
+    summary: 'Add new track',
+    description: 'Adds new track information',
+  })
+  @ApiResponse({
+    type: Track,
+    description: 'Added track information',
+    status: HttpStatus.CREATED,
+  })
+  @ApiResponse({
+    description: 'body does not contain required fields',
+    status: HttpStatus.BAD_REQUEST,
+  })
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return this.trackService.create(createTrackDto);
+  }
+
+  @ApiOperation({
     summary: 'Get track by id',
     description: 'Gets track by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     type: Track,
@@ -57,31 +81,17 @@ export class TrackController {
   }
 
   @ApiOperation({
-    summary: 'Add new track',
-    description: 'Adds new track information',
+    summary: 'Update track by id',
+    description: 'Updates track by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     type: Track,
-    description: 'Added track information',
-    status: HttpStatus.CREATED,
-  })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
-  }
-
-  @ApiOperation({
-    summary: 'Update track information by id',
-    description: 'Updates track information by id',
-  })
-  @ApiResponse({
-    type: UpdatedTrackDto,
-    description: 'Updated track information',
+    description: 'Updated track',
     status: HttpStatus.OK,
   })
   @ApiResponse({
@@ -101,8 +111,13 @@ export class TrackController {
   }
 
   @ApiOperation({
-    summary: 'Delete track information by id',
-    description: 'Deletes track information by id',
+    summary: 'Delete track by id',
+    description: 'Deletes track by id',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     description: 'Track deleted',
