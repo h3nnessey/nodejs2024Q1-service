@@ -1,13 +1,24 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavoritesService } from './favorites.service';
-import { FavoritesResponse } from './interfaces/favorites-response.interface';
+import { Favorites } from './entities';
 
+@ApiTags('Favorites')
 @Controller()
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
+  @ApiOperation({
+    summary: 'Get all favorites',
+    description: 'Gets all favorites tracks, albums and artists',
+  })
+  @ApiResponse({
+    type: Favorites,
+    description: 'Favorites tracks, albums and artists',
+    status: HttpStatus.OK,
+  })
   @Get()
-  async findMany(): Promise<FavoritesResponse> {
-    return await this.favoritesService.findMany();
+  async findMany() {
+    return this.favoritesService.findMany();
   }
 }

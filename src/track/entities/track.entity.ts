@@ -5,8 +5,8 @@ export class Track extends OmitType(CreateTrackDto, [] as const) {
   @ApiProperty({
     type: 'string',
     format: 'uuid',
-    example: 'f0f9b1b7-8b2b-4b6b-8b1b-8b2b8b1b7b2b',
-    description: 'Track ID',
+    example: 'aed621bd-fdb6-41ce-b092-d9861a2a2330',
+    description: 'Track id',
   })
   id: string;
 }

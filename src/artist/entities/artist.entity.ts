@@ -5,7 +5,7 @@ export class Artist extends OmitType(CreateArtistDto, [] as const) {
   @ApiProperty({
     type: 'string',
     format: 'uuid',
-    example: 'f0f9b1b7-8b2b-4b6b-8b1b-8b2b8b1b7b2b',
+    example: '5cdb3910-b777-4ce3-9eea-a9b62584541a',
     description: 'Artist ID',
   })
   id: string;

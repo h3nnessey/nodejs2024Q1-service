@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@/user/entities/user.entity';
-import { Track } from '@/track/entities/track.entity';
-import { Artist } from '@/artist/entities/artist.entity';
-import { Album } from '@/album/entities/album.entity';
-import { FavoritesResponse } from '@/favorites/interfaces/favorites-response.interface';
-import { EntityDatabase } from './lib/entity.db';
-import { PrimitiveDatabase } from './lib/primitive.db';
+import { User } from '@/user/entities';
+import { Track } from '@/track/entities';
+import { Artist } from '@/artist/entities';
+import { Album } from '@/album/entities';
+import { Favorites } from '@/favorites/entities/favorites.entity';
+import { EntityDatabase, PrimitiveDatabase } from './lib';
 
 @Injectable()
 export class DatabaseService {
@@ -18,7 +17,7 @@ export class DatabaseService {
     tracks: new PrimitiveDatabase<string>(),
     artists: new PrimitiveDatabase<string>(),
     albums: new PrimitiveDatabase<string>(),
-    findMany: async (): Promise<FavoritesResponse> => {
+    findMany: async (): Promise<Favorites> => {
       return {
         tracks: await Promise.all(
           (await this.favorites.tracks.findMany()).map((id) =>
