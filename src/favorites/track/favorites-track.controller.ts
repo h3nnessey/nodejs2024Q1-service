@@ -9,17 +9,17 @@ import {
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { FavoritesTrackService } from './favorites-track.service';
 
-@Controller('favs/track')
+@Controller()
 export class FavoritesTrackController {
   constructor(private readonly favoritesTrackService: FavoritesTrackService) {}
 
-  @Post(':id')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   async add(@Param('id', ParseUUIDv4Pipe) id: string) {
     return await this.favoritesTrackService.add(id);
   }
 
-  @Delete(':id')
+  @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
     return await this.favoritesTrackService.delete(id);

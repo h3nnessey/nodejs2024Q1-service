@@ -9,19 +9,19 @@ import {
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { FavoritesArtistService } from './favorites-artist.service';
 
-@Controller('favs/artist')
+@Controller()
 export class FavoritesArtistController {
   constructor(
     private readonly favoritesArtistService: FavoritesArtistService,
   ) {}
 
-  @Post(':id')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   async add(@Param('id', ParseUUIDv4Pipe) id: string) {
     return await this.favoritesArtistService.add(id);
   }
 
-  @Delete(':id')
+  @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
     return await this.favoritesArtistService.delete(id);
