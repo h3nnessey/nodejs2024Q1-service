@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { stringify } from 'yaml';
+import { writeFile } from 'node:fs/promises';
 import { config } from '@/config/env';
 import { AppModule } from './app.module';
 
@@ -16,6 +18,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  await writeFile('./doc/api-generated.yaml', stringify(document));
 
   SwaggerModule.setup('doc', app, document);
 
