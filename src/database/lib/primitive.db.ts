@@ -1,21 +1,17 @@
 export class PrimitiveDatabase<Primitive extends string | number> {
-  private primitives: Primitive[] = [];
+  private readonly primitives = new Set<Primitive>();
 
   public async add(primitive: Primitive): Promise<Primitive> {
-    const index = this.primitives.indexOf(primitive);
-
-    if (index === -1) {
-      this.primitives.push(primitive);
-    }
+    this.primitives.add(primitive);
 
     return primitive;
   }
 
   public async delete(primitive: Primitive): Promise<void> {
-    this.primitives = this.primitives.filter((value) => value !== primitive);
+    this.primitives.delete(primitive);
   }
 
   public async findMany(): Promise<Primitive[]> {
-    return this.primitives;
+    return Array.from(this.primitives.values());
   }
 }
