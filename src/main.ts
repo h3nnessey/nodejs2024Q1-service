@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { setupSwaggerFromYaml } from '@/config/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { config } from '@/config/env';
 import { AppModule } from './app.module';
 
@@ -9,6 +9,15 @@ const { PORT } = config;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const config = new DocumentBuilder()
+    .setTitle('Home Library Service API')
+    .setDescription('Home music library service')
+    .setVersion('1.0.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('doc', app, document);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,17 +25,8 @@ async function bootstrap() {
     }),
   );
 
-  // todo: decorate code with @nestjs/swagger => build serialized document => write yaml => serve yaml ???
-  const swaggerMessage = await setupSwaggerFromYaml({
-    app,
-    docsRoute: 'doc',
-    port: PORT,
-    yamlPath: './doc/api.yaml',
-  });
-
   await app.listen(PORT, async () => {
     console.log(`Server listening on: { PORT: ${PORT} }`);
-    console.log(swaggerMessage);
   });
 }
 bootstrap();
