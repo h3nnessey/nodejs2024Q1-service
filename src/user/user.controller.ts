@@ -12,8 +12,8 @@ import {
 import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { UserService } from './user.service';
-import { User, UpdatedUser } from './entities';
-import { CreateUserDto, UpdatePasswordDto } from './dto';
+import { User } from './entities';
+import { CreateUserDto, UpdatePasswordDto, UpdatedUserDto } from './dto';
 
 @ApiTags('Users')
 @Controller('user')
@@ -31,7 +31,7 @@ export class UserController {
   })
   @Get()
   async findMany() {
-    return await this.userService.findMany();
+    return this.userService.findMany();
   }
 
   @ApiOperation({
@@ -53,7 +53,7 @@ export class UserController {
   })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
-    return await this.userService.findOne(id);
+    return this.userService.findOne(id);
   }
 
   @ApiOperation({
@@ -72,7 +72,7 @@ export class UserController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+    return this.userService.create(createUserDto);
   }
 
   @ApiOperation({
@@ -80,7 +80,7 @@ export class UserController {
     description: 'Updates user password by id',
   })
   @ApiResponse({
-    type: UpdatedUser,
+    type: UpdatedUserDto,
     description: 'Updated user password',
     status: HttpStatus.OK,
   })
@@ -101,7 +101,7 @@ export class UserController {
     @Param('id', ParseUUIDv4Pipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    return await this.userService.update(id, updatePasswordDto);
+    return this.userService.update(id, updatePasswordDto);
   }
 
   @ApiOperation({
@@ -109,7 +109,7 @@ export class UserController {
     description: 'Deletes user by id',
   })
   @ApiResponse({
-    description: 'Deleted user',
+    description: 'User deleted',
     status: HttpStatus.NO_CONTENT,
   })
   @ApiResponse({
@@ -123,6 +123,6 @@ export class UserController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
-    return await this.userService.delete(id);
+    return this.userService.delete(id);
   }
 }

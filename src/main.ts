@@ -14,6 +14,7 @@ async function bootstrap() {
     .setDescription('Home music library service')
     .setVersion('1.0.0')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('doc', app, document);
@@ -24,6 +25,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.enableCors();
 
   await app.listen(PORT, async () => {
     console.log(`Server listening on: { PORT: ${PORT} }`);

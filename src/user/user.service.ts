@@ -1,10 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { DatabaseService } from '@/database/database.service';
 import { plainToClass } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
-import { DatabaseService } from '@/database/database.service';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { User } from './entities';
+import { CreateUserDto, UpdatePasswordDto } from './dto';
 
 @Injectable()
 export class UserService {

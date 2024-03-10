@@ -1,34 +1,16 @@
-import {
-  IsDefined,
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsUUID,
-  IsInt,
-  IsPositive,
-  Min,
-} from 'class-validator';
-import { Track } from '../entities/track.entity';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { CreateTrackDto } from './create-track.dto';
+import { IsDefined, IsInt, IsPositive } from 'class-validator';
 
-export class UpdateTrackDto implements Omit<Track, 'id'> {
-  @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @IsDefined()
-  @IsOptional()
-  @IsUUID('4')
-  artistId: string | null;
-
-  @IsDefined()
-  @IsOptional()
-  @IsUUID('4')
-  albumId: string | null;
-
+export class UpdateTrackDto extends OmitType(CreateTrackDto, [] as const) {
+  @ApiProperty({
+    type: 'integer',
+    example: 155,
+    description: 'Track duration in seconds',
+    required: true,
+  })
   @IsDefined()
   @IsInt()
   @IsPositive()
-  @Min(1)
   duration: number;
 }

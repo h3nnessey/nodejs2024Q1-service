@@ -1,7 +1,7 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { CreateTrackDto } from '../dto';
+import { UpdateTrackDto } from './update-track.dto';
 
-export class Track extends OmitType(CreateTrackDto, [] as const) {
+export class Track extends OmitType(UpdateTrackDto, [] as const) {
   @ApiProperty({
     type: 'string',
     format: 'uuid',
