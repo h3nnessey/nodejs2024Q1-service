@@ -16,6 +16,7 @@ import { FavoritesAlbumModule } from './album/favorites-album.module';
     RouterModule.register([
       {
         path: 'favs',
+        module: FavoritesModule,
         children: [
           {
             path: 'track/:id',

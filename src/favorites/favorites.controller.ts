@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoritesResponse } from './interfaces/favorites-response.interface';
 
-@Controller('favs')
+@Controller()
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
