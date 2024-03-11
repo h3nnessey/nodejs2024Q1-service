@@ -1,8 +1,8 @@
 import { SwaggerModule, OpenAPIObject } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import { resolve } from 'node:path';
-import { readFile } from 'node:fs/promises';
-import { parse } from 'yaml';
+import { readFile, writeFile } from 'node:fs/promises';
+import { parse, stringify } from 'yaml';
 
 interface SetupSwaggerOptions {
   app: INestApplication;
@@ -11,6 +11,20 @@ interface SetupSwaggerOptions {
   yamlPath: string;
 }
 
+export const writeOpenApiYaml = async (
+  path: string,
+  openApiObject: OpenAPIObject,
+) => {
+  try {
+    const dest = resolve(path);
+
+    await writeFile(dest, stringify(openApiObject));
+  } catch {
+    console.log('Failed to write yaml file');
+  }
+};
+
+// currently unused since autogen openapi docs by swagger
 const parseOpenApiYaml = async (
   path: string,
 ): Promise<OpenAPIObject | null> => {

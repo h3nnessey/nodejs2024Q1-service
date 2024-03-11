@@ -14,9 +14,9 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
+import { ApiInvalidUuidResponse, ApiUuidParam } from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { FavoritesAlbumService } from './favorites-album.service';
-import { ApiInvalidUuidResponse, ApiUuidParam } from '@/common/swagger';
 
 @ApiTags('Favorites')
 @Controller()
