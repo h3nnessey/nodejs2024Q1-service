@@ -1,11 +1,38 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { config } from '@/config/env';
+import { writeOpenApiYaml } from '@/config/swagger';
 import { AppModule } from './app.module';
-import 'dotenv/config';
+
+const { PORT } = config;
 
 async function bootstrap() {
-  const PORT = Number(process.env.PORT) || 4000;
   const app = await NestFactory.create(AppModule);
 
-  await app.listen(PORT, () => console.log('Server started on port: ' + PORT));
+  const config = new DocumentBuilder()
+    .setTitle('Home Library Service API')
+    .setDescription('Home music library service')
+    .setVersion('1.0.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  await writeOpenApiYaml('./doc/api-generated.yaml', document);
+
+  SwaggerModule.setup('doc', app, document);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+
+  app.enableCors();
+
+  await app.listen(PORT, async () => {
+    console.log(`Server listening on: { PORT: ${PORT} }`);
+  });
 }
 bootstrap();
