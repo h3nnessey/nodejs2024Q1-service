@@ -9,7 +9,19 @@ import {
   HttpCode,
   Put,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  ApiInvalidBodyResponse,
+  ApiInvalidUuidResponse,
+  ApiUuidParam,
+} from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto, UpdateAlbumDto } from './dto';
@@ -24,10 +36,9 @@ export class AlbumController {
     summary: 'Get all albums',
     description: 'Gets all albums',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     type: [Album],
     description: 'Album list',
-    status: HttpStatus.OK,
   })
   @Get()
   async findMany() {
@@ -38,15 +49,11 @@ export class AlbumController {
     summary: 'Add new album',
     description: 'Adds new album',
   })
-  @ApiResponse({
+  @ApiCreatedResponse({
     type: Album,
     description: 'Added album information',
-    status: HttpStatus.CREATED,
   })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
+  @ApiInvalidBodyResponse()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAlbumDto: CreateAlbumDto) {
@@ -57,24 +64,15 @@ export class AlbumController {
     summary: 'Get album by id',
     description: 'Gets album by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiOkResponse({
     type: Album,
     description: 'Album information',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Album not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.albumService.findOne(id);
@@ -84,24 +82,15 @@ export class AlbumController {
     summary: 'Update album by id',
     description: 'Updates album by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiOkResponse({
     type: Album,
     description: 'Updated album information',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Album not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Put(':id')
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
@@ -114,23 +103,14 @@ export class AlbumController {
     summary: 'Delete album by id',
     description: 'Deletes album by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiNoContentResponse({
     description: 'Album deleted',
-    status: HttpStatus.NO_CONTENT,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Album not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
