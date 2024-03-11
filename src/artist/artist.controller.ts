@@ -9,7 +9,19 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  ApiInvalidBodyResponse,
+  ApiInvalidUuidResponse,
+  ApiUuidParam,
+} from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto, UpdateArtistDto } from './dto';
@@ -24,10 +36,9 @@ export class ArtistController {
     summary: 'Get all artists',
     description: 'Gets all artists',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     type: [Artist],
     description: 'Artist list',
-    status: HttpStatus.OK,
   })
   @Get()
   async findMany() {
@@ -38,15 +49,11 @@ export class ArtistController {
     summary: 'Add new artist',
     description: 'Adds new artist',
   })
-  @ApiResponse({
+  @ApiCreatedResponse({
     type: Artist,
     description: 'Added artist information',
-    status: HttpStatus.CREATED,
   })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
+  @ApiInvalidBodyResponse()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createArtistDto: CreateArtistDto) {
@@ -57,24 +64,16 @@ export class ArtistController {
     summary: 'Get artist by id',
     description: 'Gets artist by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiOkResponse({
     type: Artist,
     description: 'Artist information',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Artist not found',
     status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.artistService.findOne(id);
@@ -84,24 +83,15 @@ export class ArtistController {
     summary: 'Update artist by id',
     description: 'Updates artist by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiOkResponse({
     type: Artist,
     description: 'Updated artist information',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Artist not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Put(':id')
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
@@ -114,23 +104,14 @@ export class ArtistController {
     summary: 'Delete artist by id',
     description: 'Deletes artist by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiNoContentResponse({
     description: 'Artist deleted',
-    status: HttpStatus.NO_CONTENT,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Artist not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {

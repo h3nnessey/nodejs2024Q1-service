@@ -64,15 +64,15 @@ export class TrackController {
     summary: 'Get track by id',
     description: 'Gets track by id',
   })
-  @ApiUuidParam()
   @ApiOkResponse({
     type: Track,
     description: 'Track information',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'Track not found',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.trackService.findOne(id);
@@ -82,15 +82,15 @@ export class TrackController {
     summary: 'Update track by id',
     description: 'Updates track by id',
   })
-  @ApiUuidParam()
   @ApiOkResponse({
     type: Track,
     description: 'Updated track',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'Track not found',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Put(':id')
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
@@ -103,14 +103,14 @@ export class TrackController {
     summary: 'Delete track by id',
     description: 'Deletes track by id',
   })
-  @ApiUuidParam()
   @ApiNoContentResponse({
     description: 'Track deleted',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'Track not found',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {

@@ -65,15 +65,15 @@ export class UserController {
     summary: 'Get user by id',
     description: 'Gets user by id',
   })
-  @ApiUuidParam()
   @ApiOkResponse({
     type: User,
     description: 'User data',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'User not found',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.userService.findOne(id);
@@ -83,18 +83,18 @@ export class UserController {
     summary: 'Update user password by id',
     description: 'Updates user password by id',
   })
-  @ApiUuidParam()
   @ApiOkResponse({
     type: UpdatedUserDto,
     description: 'Updated user password',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'User not found',
   })
   @ApiForbiddenResponse({
     description: 'Invalid oldPassword',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Put(':id')
   async update(
     @Param('id', ParseUUIDv4Pipe) id: string,
@@ -107,14 +107,14 @@ export class UserController {
     summary: 'Delete user by id',
     description: 'Deletes user by id',
   })
-  @ApiUuidParam()
   @ApiNoContentResponse({
     description: 'User deleted',
   })
-  @ApiInvalidUuidResponse()
   @ApiNotFoundResponse({
     description: 'User not found',
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
