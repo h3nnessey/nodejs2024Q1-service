@@ -9,7 +9,19 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  ApiInvalidBodyResponse,
+  ApiInvalidUuidResponse,
+  ApiUuidParam,
+} from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { TrackService } from './track.service';
 import { CreateTrackDto, UpdateTrackDto } from './dto';
@@ -24,10 +36,9 @@ export class TrackController {
     summary: 'Get all tracks',
     description: 'Gets all tracks',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     type: [Track],
     description: 'Track list',
-    status: HttpStatus.OK,
   })
   @Get()
   async findMany() {
@@ -38,15 +49,11 @@ export class TrackController {
     summary: 'Add new track',
     description: 'Adds new track information',
   })
-  @ApiResponse({
+  @ApiCreatedResponse({
     type: Track,
     description: 'Added track information',
-    status: HttpStatus.CREATED,
   })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
+  @ApiInvalidBodyResponse()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createTrackDto: CreateTrackDto) {
@@ -57,23 +64,14 @@ export class TrackController {
     summary: 'Get track by id',
     description: 'Gets track by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiOkResponse({
     type: Track,
     description: 'Track information',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'Track not found',
-    status: HttpStatus.NOT_FOUND,
   })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
@@ -84,23 +82,14 @@ export class TrackController {
     summary: 'Update track by id',
     description: 'Updates track by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiOkResponse({
     type: Track,
     description: 'Updated track',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'Track not found',
-    status: HttpStatus.NOT_FOUND,
   })
   @Put(':id')
   async update(
@@ -114,22 +103,13 @@ export class TrackController {
     summary: 'Delete track by id',
     description: 'Deletes track by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiNoContentResponse({
     description: 'Track deleted',
-    status: HttpStatus.NO_CONTENT,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'Track not found',
-    status: HttpStatus.NOT_FOUND,
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
