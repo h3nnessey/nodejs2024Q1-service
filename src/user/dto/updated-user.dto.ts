@@ -1,11 +1,11 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { User as UserEntity } from '../entities/';
+import { User } from '../entities';
 
-export class User extends PickType(UserEntity, [
+export class UpdatedUserDto extends PickType(User, [
   'id',
+  'createdAt',
   'login',
   'password',
-  'createdAt',
 ] as const) {
   @ApiProperty({
     type: 'number',

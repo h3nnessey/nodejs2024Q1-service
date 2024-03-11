@@ -30,7 +30,7 @@ paths:
               $ref: "#/components/schemas/CreateUserDto"
       responses:
         "201":
-          description: Created user
+          description: User created
           content:
             application/json:
               schema:
@@ -85,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UpdatedUserDto"
         "400":
           description: id is invalid (not UUID)
         "403":
@@ -598,23 +598,23 @@ components:
           type: string
           example: cat_lover
           description: User login
+        version:
+          type: number
+          example: 1
+          description: User version
         createdAt:
           type: number
           example: 1710084738234
           description: User creation time
-        version:
-          type: number
-          example: 2
-          description: User version
         updatedAt:
           type: number
-          example: 1710094738234
+          example: 1710084738234
           description: User update time
       required:
         - id
         - login
-        - createdAt
         - version
+        - createdAt
         - updatedAt
     CreateUserDto:
       type: object
@@ -644,6 +644,36 @@ components:
       required:
         - oldPassword
         - newPassword
+    UpdatedUserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f0f9b1b7-8b2b-4b6b-8b1b-8b2b8b1b7b2b
+          description: User ID
+        login:
+          type: string
+          example: cat_lover
+          description: User login
+        createdAt:
+          type: number
+          example: 1710084738234
+          description: User creation time
+        version:
+          type: number
+          example: 2
+          description: User version
+        updatedAt:
+          type: number
+          example: 1710094738234
+          description: User update time
+      required:
+        - id
+        - login
+        - createdAt
+        - version
+        - updatedAt
     Track:
       type: object
       properties:

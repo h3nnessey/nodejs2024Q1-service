@@ -9,11 +9,24 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+} from '@nestjs/swagger';
+import {
+  ApiInvalidBodyResponse,
+  ApiInvalidUuidResponse,
+  ApiUuidParam,
+} from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { UserService } from './user.service';
-import { User } from './entities';
 import { CreateUserDto, UpdatePasswordDto, UpdatedUserDto } from './dto';
+import { User } from './entities';
 
 @ApiTags('Users')
 @Controller('user')
@@ -24,10 +37,9 @@ export class UserController {
     summary: 'Get all users',
     description: 'Gets all users',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     type: [User],
     description: 'Users list',
-    status: HttpStatus.OK,
   })
   @Get()
   async findMany() {
@@ -38,15 +50,11 @@ export class UserController {
     summary: 'Create new user',
     description: 'Creates a new user',
   })
-  @ApiResponse({
+  @ApiCreatedResponse({
     type: User,
-    description: 'Created user',
-    status: HttpStatus.CREATED,
+    description: 'User created',
   })
-  @ApiResponse({
-    description: 'body does not contain required fields',
-    status: HttpStatus.BAD_REQUEST,
-  })
+  @ApiInvalidBodyResponse()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
@@ -57,23 +65,14 @@ export class UserController {
     summary: 'Get user by id',
     description: 'Gets user by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiOkResponse({
     type: User,
     description: 'User data',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'User not found',
-    status: HttpStatus.NOT_FOUND,
   })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDv4Pipe) id: string) {
@@ -84,27 +83,17 @@ export class UserController {
     summary: 'Update user password by id',
     description: 'Updates user password by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiOkResponse({
     type: UpdatedUserDto,
     description: 'Updated user password',
-    status: HttpStatus.OK,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'User not found',
-    status: HttpStatus.NOT_FOUND,
   })
-  @ApiResponse({
+  @ApiForbiddenResponse({
     description: 'Invalid oldPassword',
-    status: HttpStatus.FORBIDDEN,
   })
   @Put(':id')
   async update(
@@ -118,22 +107,13 @@ export class UserController {
     summary: 'Delete user by id',
     description: 'Deletes user by id',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiUuidParam()
+  @ApiNoContentResponse({
     description: 'User deleted',
-    status: HttpStatus.NO_CONTENT,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiInvalidUuidResponse()
+  @ApiNotFoundResponse({
     description: 'User not found',
-    status: HttpStatus.NOT_FOUND,
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
