@@ -6,7 +6,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
+import { ApiInvalidUuidResponse, ApiUuidParam } from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { FavoritesArtistService } from './favorites-artist.service';
 
@@ -21,23 +29,14 @@ export class FavoritesArtistController {
     summary: 'Add artist to the favorites',
     description: 'Adds artist to the favorites',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiCreatedResponse({
     description: 'Artist added to favorites',
-    status: HttpStatus.CREATED,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiUnprocessableEntityResponse({
     description: 'Artist does not exist',
-    status: HttpStatus.UNPROCESSABLE_ENTITY,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async add(@Param('id', ParseUUIDv4Pipe) id: string) {
@@ -48,23 +47,14 @@ export class FavoritesArtistController {
     summary: 'Delete artist from favorites',
     description: 'Deletes artist from favorites',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    format: 'uuid',
-  })
-  @ApiResponse({
+  @ApiNoContentResponse({
     description: 'Artist deleted from favorites',
-    status: HttpStatus.NO_CONTENT,
   })
-  @ApiResponse({
-    description: 'id is invalid (not UUID)',
-    status: HttpStatus.BAD_REQUEST,
-  })
-  @ApiResponse({
+  @ApiNotFoundResponse({
     description: 'Artist not found',
-    status: HttpStatus.NOT_FOUND,
   })
+  @ApiInvalidUuidResponse()
+  @ApiUuidParam()
   @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {

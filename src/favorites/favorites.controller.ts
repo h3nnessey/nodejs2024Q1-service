@@ -1,5 +1,5 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FavoritesService } from './favorites.service';
 import { Favorites } from './entities';
 
@@ -12,10 +12,9 @@ export class FavoritesController {
     summary: 'Get all favorites',
     description: 'Gets all favorites tracks, albums and artists',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     type: Favorites,
     description: 'Favorites tracks, albums and artists',
-    status: HttpStatus.OK,
   })
   @Get()
   async findMany() {
