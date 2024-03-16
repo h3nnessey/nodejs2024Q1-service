@@ -1,58 +1,66 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import { DatabaseService } from '@/database/database.service';
-import { plainToClass } from 'class-transformer';
-import { v4 as uuidV4 } from 'uuid';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TransformPlainToInstance } from 'class-transformer';
 import { User } from './entities';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
+  @TransformPlainToInstance(User)
   async create(createUserDto: CreateUserDto) {
-    const dateNow = Date.now();
-
-    const user = await this.db.users.create({
-      id: uuidV4(),
-      login: createUserDto.login,
-      password: createUserDto.password,
-      version: 1,
-      createdAt: dateNow,
-      updatedAt: dateNow,
-    });
-
-    return plainToClass(User, user);
+    return this.userRepository.save(createUserDto);
   }
 
+  @TransformPlainToInstance(User)
   async findMany() {
-    const users = await this.db.users.findMany();
-
-    return users.map((user) => plainToClass(User, user));
+    return this.userRepository.find();
   }
 
+  @TransformPlainToInstance(User)
   async findOne(id: string) {
-    const user = await this.db.users.findOne(id);
+    const user = await this.userRepository.findOne({ where: { id } });
 
-    return plainToClass(User, user);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
+  @TransformPlainToInstance(User)
   async update(id: string, { newPassword, oldPassword }: UpdatePasswordDto) {
-    const user = await this.db.users.findOne(id);
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Wrong old password');
     }
 
-    const updatedUser = await this.db.users.update(id, {
+    return this.userRepository.save({
+      ...user,
       password: newPassword,
-      updatedAt: Date.now(),
-      version: user.version + 1,
     });
-
-    return plainToClass(User, updatedUser);
   }
 
   async delete(id: string) {
-    await this.db.users.delete(id);
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.userRepository.remove(user);
   }
 }
