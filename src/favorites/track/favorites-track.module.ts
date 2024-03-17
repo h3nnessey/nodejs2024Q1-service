@@ -7,6 +7,7 @@ import { FavoritesTrack } from './entities/favorites-track.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([FavoritesTrack, Track])],
+  exports: [FavoritesTrackService],
   controllers: [FavoritesTrackController],
   providers: [FavoritesTrackService],
 })

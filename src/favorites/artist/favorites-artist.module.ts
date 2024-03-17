@@ -7,6 +7,7 @@ import { FavoritesArtist } from './entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([FavoritesArtist, Artist])],
+  exports: [FavoritesArtistService],
   controllers: [FavoritesArtistController],
   providers: [FavoritesArtistService],
 })

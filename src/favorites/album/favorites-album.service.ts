@@ -38,4 +38,12 @@ export class FavoritesAlbumService {
 
     await this.favoritesAlbumRepository.remove(album);
   }
+
+  async findMany() {
+    return (
+      await this.favoritesAlbumRepository.find({
+        relations: { album: true },
+      })
+    ).map(({ album }) => album);
+  }
 }

@@ -38,4 +38,12 @@ export class FavoritesTrackService {
 
     await this.favoritesTrackRepository.remove(track);
   }
+
+  async findMany() {
+    return (
+      await this.favoritesTrackRepository.find({
+        relations: { track: true },
+      })
+    ).map(({ track }) => track);
+  }
 }
