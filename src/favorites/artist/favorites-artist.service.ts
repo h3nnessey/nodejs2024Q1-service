@@ -1,15 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '@/database/database.service';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Artist } from '@/artist/entities';
+import { FavoritesArtist } from './entities';
 
 @Injectable()
 export class FavoritesArtistService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    @InjectRepository(FavoritesArtist)
+    private readonly favoritesArtistRepository: Repository<FavoritesArtist>,
+    @InjectRepository(Artist)
+    private readonly artistRepository: Repository<Artist>,
+  ) {}
+
   async add(id: string) {
-    await this.db.artists.entityExistenceCheck(id);
-    await this.db.favorites.artists.add(id);
+    const artist = await this.artistRepository.findOne({ where: { id } });
+
+    if (!artist) {
+      throw new UnprocessableEntityException('Artist does not exists');
+    }
+
+    await this.favoritesArtistRepository.save({ artist });
   }
 
-  async delete(artistId: string) {
-    await this.db.favorites.artists.delete(artistId);
+  async delete(id: string) {
+    const artist = await this.favoritesArtistRepository.findOne({
+      where: { artist: { id } },
+    });
+
+    if (!artist) {
+      throw new NotFoundException('Artist not in favorites');
+    }
+
+    await this.favoritesArtistRepository.remove(artist);
   }
 }

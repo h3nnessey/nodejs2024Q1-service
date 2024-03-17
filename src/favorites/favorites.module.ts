@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { FavoritesArtist } from './artist/entities/favorites-artist.entity';
+import { FavoritesTrack } from './track/entities/favorites-track.entity';
+import { FavoritesAlbum } from './album/entities/favorites-album.entity';
 import { FavoritesService } from './favorites.service';
 import { FavoritesController } from './favorites.controller';
 import { FavoritesTrackModule } from './track/favorites-track.module';
@@ -10,6 +14,7 @@ import { FavoritesAlbumModule } from './album/favorites-album.module';
   controllers: [FavoritesController],
   providers: [FavoritesService],
   imports: [
+    TypeOrmModule.forFeature([FavoritesAlbum, FavoritesTrack, FavoritesArtist]),
     FavoritesTrackModule,
     FavoritesArtistModule,
     FavoritesAlbumModule,

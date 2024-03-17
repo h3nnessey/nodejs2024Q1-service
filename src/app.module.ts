@@ -4,12 +4,7 @@ import { UserModule } from './user/user.module';
 import { TrackModule } from './track/track.module';
 import { ArtistModule } from './artist/artist.module';
 import { AlbumModule } from './album/album.module';
-import { DatabaseModule } from './database/database.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { User } from './user/entities';
-import { Album } from './album/entities';
-import { Track } from './track/entities';
-import { Artist } from './artist/entities';
 
 @Module({
   imports: [
@@ -20,10 +15,9 @@ import { Artist } from './artist/entities';
       username: 'postgres',
       password: 'root',
       database: 'postgres',
-      entities: [User, Album, Track, Artist],
       synchronize: true,
+      autoLoadEntities: true,
     }),
-    DatabaseModule,
     UserModule,
     TrackModule,
     ArtistModule,
