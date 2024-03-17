@@ -7,6 +7,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Album } from '@/album/entities';
+import { Artist } from '@/artist/entities';
 import { CreateTrackDto } from '../dto';
 
 @Entity()
@@ -69,4 +70,8 @@ export class Track implements CreateTrackDto {
   @ManyToOne(() => Album, (album) => album.tracks, { onDelete: 'SET NULL' })
   @JoinTable({ name: 'albumId' })
   album: Album;
+
+  @ManyToOne(() => Artist, (artist) => artist.tracks, { onDelete: 'SET NULL' })
+  @JoinTable({ name: 'artistId' })
+  artist: Artist;
 }

@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+  JoinTable,
+} from 'typeorm';
 import { Track } from '@/track/entities';
+import { Artist } from '@/artist/entities';
 import { CreateAlbumDto } from '../dto';
 
 @Entity()
@@ -46,4 +54,8 @@ export class Album implements CreateAlbumDto {
 
   @OneToMany(() => Track, (track) => track.album)
   tracks: Track[];
+
+  @ManyToOne(() => Artist, (artist) => artist.tracks, { onDelete: 'SET NULL' })
+  @JoinTable({ name: 'artistId' })
+  artist: Artist;
 }

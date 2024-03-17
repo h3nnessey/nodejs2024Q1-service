@@ -32,7 +32,7 @@ export class ArtistService {
   async update(id: string, updateArtistDto: UpdateArtistDto) {
     const artist = await this.findOne(id);
 
-    return this.artistRepository.save({ ...artist, updateArtistDto });
+    return this.artistRepository.save({ ...artist, ...updateArtistDto });
   }
 
   async delete(id: string) {
