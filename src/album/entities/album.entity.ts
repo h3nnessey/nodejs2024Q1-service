@@ -5,7 +5,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
-  JoinTable,
 } from 'typeorm';
 import { Track } from '@/track/entities';
 import { Artist } from '@/artist/entities';
@@ -56,6 +55,5 @@ export class Album implements CreateAlbumDto {
   tracks: Track[];
 
   @ManyToOne(() => Artist, (artist) => artist.tracks, { onDelete: 'SET NULL' })
-  @JoinTable({ name: 'artistId' })
   artist: Artist;
 }
