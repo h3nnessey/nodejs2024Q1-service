@@ -8,7 +8,6 @@ export class FavoritesArtist {
 
   @OneToOne(() => Artist, {
     onDelete: 'CASCADE',
-    eager: true,
   })
   @JoinColumn()
   artist: Artist;
