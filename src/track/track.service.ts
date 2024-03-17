@@ -1,33 +1,43 @@
-import { Injectable } from '@nestjs/common';
-import { v4 as uuidV4 } from 'uuid';
-import { DatabaseService } from '@/database/database.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTrackDto, UpdateTrackDto } from './dto/';
+import { Track } from './entities';
 
 @Injectable()
 export class TrackService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    @InjectRepository(Track)
+    private readonly trackRepository: Repository<Track>,
+  ) {}
 
   async create(createTrackDto: CreateTrackDto) {
-    return this.db.tracks.create({
-      id: uuidV4(),
-      ...createTrackDto,
-    });
+    return this.trackRepository.save(createTrackDto);
   }
 
   async findMany() {
-    return this.db.tracks.findMany();
+    return this.trackRepository.find();
   }
 
   async findOne(id: string) {
-    return this.db.tracks.findOne(id);
+    const track = await this.trackRepository.findOne({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    return track;
   }
 
   async update(id: string, updateTrackDto: UpdateTrackDto) {
-    return this.db.tracks.update(id, updateTrackDto);
+    const track = await this.findOne(id);
+
+    return this.trackRepository.save({ ...track, updateTrackDto });
   }
 
   async delete(id: string) {
-    await this.db.favorites.tracks.delete(id);
-    await this.db.tracks.delete(id);
+    const track = await this.findOne(id);
+
+    await this.trackRepository.remove(track);
   }
 }
