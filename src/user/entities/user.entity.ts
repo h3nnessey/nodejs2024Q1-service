@@ -8,9 +8,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateUserDto } from '../dto';
 
 @Entity()
-export class User {
+export class User implements CreateUserDto {
   @ApiProperty({
     type: 'string',
     format: 'uuid',
@@ -48,7 +49,7 @@ export class User {
   })
   @Transform(({ value }) => new Date(value).getTime())
   @CreateDateColumn()
-  createdAt: number;
+  createdAt: Date;
 
   @ApiProperty({
     type: 'number',
@@ -57,5 +58,5 @@ export class User {
   })
   @Transform(({ value }) => new Date(value).getTime())
   @UpdateDateColumn()
-  updatedAt: number;
+  updatedAt: Date;
 }

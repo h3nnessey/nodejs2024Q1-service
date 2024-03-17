@@ -7,6 +7,7 @@ import { AlbumModule } from './album/album.module';
 import { DatabaseModule } from './database/database.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { User } from './user/entities';
+import { Album } from './album/entities';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { User } from './user/entities';
       username: 'postgres',
       password: 'root',
       database: 'postgres',
-      entities: [User],
+      entities: [User, Album],
       synchronize: true,
     }),
     DatabaseModule,

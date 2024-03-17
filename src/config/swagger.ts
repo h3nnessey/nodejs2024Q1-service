@@ -24,7 +24,6 @@ export const writeOpenApiYaml = async (
   }
 };
 
-// currently unused since autogen openapi docs by swagger
 const parseOpenApiYaml = async (
   path: string,
 ): Promise<OpenAPIObject | null> => {
