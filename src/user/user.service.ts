@@ -55,11 +55,7 @@ export class UserService {
   }
 
   async delete(id: string) {
-    const user = await this.userRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    const user = await this.findOne(id);
 
     await this.userRepository.remove(user);
   }

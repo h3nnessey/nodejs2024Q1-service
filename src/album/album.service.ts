@@ -30,22 +30,14 @@ export class AlbumService {
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const album = await this.albumRepository.findOne({ where: { id } });
-
-    if (!album) {
-      throw new NotFoundException('Album not found');
-    }
+    const album = await this.findOne(id);
 
     return this.albumRepository.save({ ...album, updateAlbumDto });
   }
 
   async delete(id: string) {
-    const user = await this.albumRepository.findOne({ where: { id } });
+    const album = await this.findOne(id);
 
-    if (!user) {
-      throw new NotFoundException('Album not found');
-    }
-
-    await this.albumRepository.remove(user);
+    await this.albumRepository.remove(album);
   }
 }
