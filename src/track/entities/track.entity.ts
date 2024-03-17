@@ -1,10 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinTable,
+} from 'typeorm';
+import { Album } from '@/album/entities';
 import { CreateTrackDto } from '../dto';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-// relations: favs
-// await this.db.favorites.tracks.delete(id);
-// await this.db.tracks.delete(id);
 @Entity()
 export class Track implements CreateTrackDto {
   @ApiProperty({
@@ -61,4 +65,8 @@ export class Track implements CreateTrackDto {
     type: 'integer',
   })
   duration: number;
+
+  @ManyToOne(() => Album, (album) => album.tracks, { onDelete: 'SET NULL' })
+  @JoinTable({ name: 'albumId' })
+  album: Album;
 }

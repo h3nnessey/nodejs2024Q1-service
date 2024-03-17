@@ -1,18 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Track } from '@/track/entities';
 import { CreateAlbumDto } from '../dto';
 
-// relations: tracks, favs albums
-// const tracks = (await this.db.tracks.findMany()).filter(
-//   (track) => track.albumId === id,
-// );
-
-// tracks.forEach(async (track) => {
-//   await this.db.tracks.update(track.id, { albumId: null });
-// });
-
-// await this.db.favorites.albums.delete(id);
-// await this.db.albums.delete(id);
 @Entity()
 export class Album implements CreateAlbumDto {
   @ApiProperty({
@@ -53,4 +43,7 @@ export class Album implements CreateAlbumDto {
   })
   @Column({ type: 'integer' })
   year: number;
+
+  @OneToMany(() => Track, (track) => track.album)
+  tracks: Track[];
 }

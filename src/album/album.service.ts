@@ -20,7 +20,9 @@ export class AlbumService {
   }
 
   async findOne(id: string) {
-    const album = await this.albumRepository.findOne({ where: { id } });
+    const album = await this.albumRepository.findOne({
+      where: { id },
+    });
 
     if (!album) {
       throw new NotFoundException('Album not found');
@@ -32,7 +34,10 @@ export class AlbumService {
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
     const album = await this.findOne(id);
 
-    return this.albumRepository.save({ ...album, updateAlbumDto });
+    return this.albumRepository.save({
+      ...album,
+      ...updateAlbumDto,
+    });
   }
 
   async delete(id: string) {
