@@ -28,7 +28,7 @@ export class Artist implements CreateArtistDto {
     example: false,
     description: 'Has Grammy award',
   })
-  @Column()
+  @Column({ default: false })
   grammy: boolean;
 
   @OneToMany(() => Track, (track) => track.artist)

@@ -48,7 +48,7 @@ export class Album implements CreateAlbumDto {
     description: 'Year of release',
     example: 1978,
   })
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: new Date().getFullYear() })
   year: number;
 
   @OneToMany(() => Track, (track) => track.album)
