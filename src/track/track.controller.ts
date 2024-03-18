@@ -28,7 +28,7 @@ import { CreateTrackDto, UpdateTrackDto } from './dto';
 import { Track } from './entities';
 
 @ApiTags('Tracks')
-@Controller('track')
+@Controller()
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 

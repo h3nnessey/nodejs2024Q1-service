@@ -35,7 +35,7 @@ export class FavoritesTrackController {
   })
   @ApiInvalidUuidResponse()
   @ApiUuidParam()
-  @Post()
+  @Post(':id')
   @HttpCode(HttpStatus.CREATED)
   async add(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.favoritesTrackService.add(id);
@@ -53,7 +53,7 @@ export class FavoritesTrackController {
   })
   @ApiInvalidUuidResponse()
   @ApiUuidParam()
-  @Delete()
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseUUIDv4Pipe) id: string) {
     return this.favoritesTrackService.delete(id);
