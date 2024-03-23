@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Track } from '@/track/entities';
 import { Artist } from '@/artist/entities';
@@ -33,6 +34,11 @@ export class Album implements CreateAlbumDto {
     nullable: true,
     default: null,
   })
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
+  @JoinColumn({
+    name: 'artistId',
+    referencedColumnName: 'id',
+  })
   artistId: string | null;
 
   @ApiProperty({
@@ -53,7 +59,4 @@ export class Album implements CreateAlbumDto {
 
   @OneToMany(() => Track, (track) => track.album)
   tracks: Track[];
-
-  @ManyToOne(() => Artist, (artist) => artist.tracks, { onDelete: 'SET NULL' })
-  artist: Artist;
 }

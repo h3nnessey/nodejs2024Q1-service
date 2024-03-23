@@ -34,6 +34,6 @@ export class Artist implements CreateArtistDto {
   @OneToMany(() => Track, (track) => track.artist)
   tracks: Track[];
 
-  @OneToMany(() => Album, (album) => album.artist)
-  albums: Album[];
+  @OneToMany(() => Album, (album) => album.id)
+  albumIds: string[];
 }
