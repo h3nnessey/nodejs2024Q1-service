@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Artist } from '@/artist/entities';
+import { Artist } from '@/modules/artist/entities';
 import { FavoritesArtist } from './entities';
 
 @Injectable()

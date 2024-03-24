@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Track } from '@/track/entities';
-import { Album } from '@/album/entities';
+import { Track } from '@/modules/track/entities';
+import { Album } from '@/modules/album/entities';
 import { CreateArtistDto } from '../dto';
 
 @Entity()

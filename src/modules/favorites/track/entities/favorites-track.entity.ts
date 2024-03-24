@@ -1,12 +1,14 @@
 import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Album } from '@/album/entities';
+import { Track } from '@/modules/track/entities';
 
 @Entity()
-export class FavoritesAlbum {
+export class FavoritesTrack {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => Album, { onDelete: 'CASCADE' })
+  @OneToOne(() => Track, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
-  album: Album;
+  track: Track;
 }

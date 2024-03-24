@@ -6,8 +6,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Album } from '@/album/entities';
-import { Artist } from '@/artist/entities';
+import { Album } from '@/modules/album/entities';
+import { Artist } from '@/modules/artist/entities';
 import { CreateTrackDto } from '../dto';
 
 @Entity()

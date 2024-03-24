@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Track } from '@/track/entities';
+import { Track } from '@/modules/track/entities';
 import { FavoritesTrack } from './entities/favorites-track.entity';
 
 @Injectable()

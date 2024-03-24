@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Album } from '@/album/entities';
+import { Album } from '@/modules/album/entities';
 import { FavoritesAlbum } from './entities';
 
 @Injectable()

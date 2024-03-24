@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Album } from '@/album/entities';
+import { Album } from '@/modules/album/entities';
 import { FavoritesAlbumController } from './favorites-album.controller';
 import { FavoritesAlbumService } from './favorites-album.service';
 import { FavoritesAlbum } from './entities';
