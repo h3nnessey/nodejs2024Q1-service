@@ -34,7 +34,7 @@ export class Album implements CreateAlbumDto {
     nullable: true,
     default: null,
   })
-  @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({
     name: 'artistId',
     referencedColumnName: 'id',
@@ -57,6 +57,6 @@ export class Album implements CreateAlbumDto {
   @Column({ type: 'integer', default: new Date().getFullYear() })
   year: number;
 
-  @OneToMany(() => Track, (track) => track.album)
-  tracks: Track[];
+  @OneToMany(() => Track, (track) => track.id)
+  trackIds: string[];
 }

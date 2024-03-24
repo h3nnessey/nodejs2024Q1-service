@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Album } from '@/album/entities';
 import { Artist } from '@/artist/entities';
 import { CreateTrackDto } from '../dto';
@@ -35,6 +41,11 @@ export class Track implements CreateTrackDto {
     nullable: true,
     default: null,
   })
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn({
+    name: 'artistId',
+    referencedColumnName: 'id',
+  })
   artistId: string | null;
 
   @ApiProperty({
@@ -49,6 +60,11 @@ export class Track implements CreateTrackDto {
     nullable: true,
     default: null,
   })
+  @ManyToOne(() => Album, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn({
+    name: 'albumId',
+    referencedColumnName: 'id',
+  })
   albumId: string | null;
 
   @ApiProperty({
@@ -60,10 +76,4 @@ export class Track implements CreateTrackDto {
     type: 'integer',
   })
   duration: number;
-
-  @ManyToOne(() => Album, (album) => album.tracks, { onDelete: 'SET NULL' })
-  album: Album;
-
-  @ManyToOne(() => Artist, (artist) => artist.tracks, { onDelete: 'SET NULL' })
-  artist: Artist;
 }

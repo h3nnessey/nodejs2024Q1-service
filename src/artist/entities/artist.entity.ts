@@ -31,8 +31,8 @@ export class Artist implements CreateArtistDto {
   @Column({ default: false })
   grammy: boolean;
 
-  @OneToMany(() => Track, (track) => track.artist)
-  tracks: Track[];
+  @OneToMany(() => Track, (track) => track.id)
+  trackIds: string[];
 
   @OneToMany(() => Album, (album) => album.id)
   albumIds: string[];
