@@ -49,4 +49,6 @@ networks:
 
 volumes:
   postgres:
+    name: postgres
   logs:
+    name: logs
