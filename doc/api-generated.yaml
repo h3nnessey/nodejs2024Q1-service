@@ -815,6 +815,11 @@ components:
     Album:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          example: 316ceb21-4a71-4371-abf9-5f35c8cfef9c
+          description: Album id
         artistId:
           type: string
           format: uuid
@@ -829,16 +834,11 @@ components:
           type: integer
           description: Year of release
           example: 1978
-        id:
-          type: string
-          format: uuid
-          example: 316ceb21-4a71-4371-abf9-5f35c8cfef9c
-          description: Album id
       required:
+        - id
         - artistId
         - name
         - year
-        - id
     CreateAlbumDto:
       type: object
       properties:
