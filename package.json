@@ -26,7 +26,8 @@
     "migration:create": "npm run build && npm run typeorm migration:create src/migrations/template",
     "docker:migration:generate": "docker-compose exec rest-service npm run migration:generate",
     "docker:migration:migrate": "docker-compose exec rest-service npm run migration:migrate",
-    "docker:migration:create": "docker-compose exec rest-service npm run migration:create"
+    "docker:migration:create": "docker-compose exec rest-service npm run migration:create",
+    "docker:scout": "docker login && docker scout cves h3nnessey/rest-service && docker scout cves h3nnessey/postgres"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",
