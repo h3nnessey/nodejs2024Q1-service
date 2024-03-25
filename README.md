@@ -3,66 +3,81 @@
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Node.js 20 LTS- [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker Desktop - [Download & Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### BEFORE GET STARTED: PLEASE, CLEAN THE DOCKER FILES (IMAGES, CONTAINERS, VOLUMES, ETC)
 
 ## Downloading
 
-```
-git clone {repository URL}
+```bash
+# clone using ssh or by another way
+git clone git@github.com:h3nnessey/nodejs2024Q1-service.git
+
+# change dir to the repo
+cd nodejs2024Q1-service
+
+# checkout dev branch
+git checkout dev
 ```
 
 ## Installing NPM modules
 
-```
+```bash
 npm install
+```
+
+## Setting up env
+
+- create `.env` file based on `.env.example` or just rename it (take care about comment nearby `DATABASE_HOST`)
+
+## Run Docker Desktop and Sign In (for docker scout purposes)
+
+```bash
+# can also sign in by this command (still need to run Docker Desktop)
+docker login
 ```
 
 ## Running application
 
-```
-npm run build
+```bash
+# detached mod
+docker-compose up -d
+
+# view active containers
+docker ps
+
+# view builded images (rest-service is less than 500 MB)
+docker images
+
+# create tables in postgresql based on initial migrations and app is ready to work now
+npm run start docker:migration:migrate
 ```
 
-```
-npm run start
-```
+## Docker scout (vulnerability check)
 
-After starting the app on port (4000 as default or create `.env` file based on `.env.example`) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+```bash
+# check entire app including database on vulnerabilities
+npm run docker:scout
+```
 
 ## Testing
 
-After application running open new terminal and enter:
-
-To run all tests
-
-```
+```bash
+# To run all tests
 npm run test
-```
 
-To run only one of all test suites
-
-```
+# To run only one of all test suites
 npm run test -- <path to suite>
 ```
 
 ### Auto-fix and format
 
-```
-
+```bash
+# ESlint
 npm run lint
 
-```
-
-```
-
+# prettier
 npm run format
 
 ```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
