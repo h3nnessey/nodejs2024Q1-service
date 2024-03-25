@@ -17,7 +17,6 @@ import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.
     TypeOrmModule.forRoot({
       ...dataSourceOptions,
       synchronize: false,
-      autoLoadEntities: true,
     }),
     UserModule,
     TrackModule,
