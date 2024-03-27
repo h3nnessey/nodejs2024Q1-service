@@ -12,9 +12,15 @@ import { FavoritesModule } from '@/modules/favorites/favorites.module';
 import { FavoritesTrackModule } from '@/modules/favorites/track/favorites-track.module';
 import { FavoritesArtistModule } from '@/modules/favorites/artist/favorites-artist.module';
 import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.module';
-import { AuthGuard } from './modules/auth/guards';
+import { AccessTokenGuard } from '@/modules/auth/guards';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
   imports: [
     TypeOrmModule.forRoot({
       ...dataSourceOptions,
@@ -54,12 +60,6 @@ import { AuthGuard } from './modules/auth/guards';
         ],
       },
     ]),
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule {}

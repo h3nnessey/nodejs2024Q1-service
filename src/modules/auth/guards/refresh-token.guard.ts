@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { config } from '@/config/env';
 import { TokenPayload } from '../interfaces';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class RefreshTokenGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync<TokenPayload>(
         refreshToken,
         {
-          secret: 'JWT_SECRET_REFRESH_KEY',
+          secret: config.jwt.secret_refresh_key,
         },
       );
 

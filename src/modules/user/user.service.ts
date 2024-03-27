@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hash, compare } from 'bcrypt';
 import { TransformPlainToInstance } from 'class-transformer';
+import { config } from '@/config/env';
 import { User } from './entities';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 
@@ -18,7 +19,7 @@ export class UserService {
 
   @TransformPlainToInstance(User)
   async create({ login, password }: CreateUserDto) {
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await hash(password, config.hash.crypt_salt);
 
     return this.userRepository.save({ login, password: hashedPassword });
   }
@@ -64,7 +65,7 @@ export class UserService {
       throw new ForbiddenException('Wrong old password');
     }
 
-    const newHashedPassword = await hash(newPassword, 10);
+    const newHashedPassword = await hash(newPassword, config.hash.crypt_salt);
 
     return this.userRepository.save({
       ...user,

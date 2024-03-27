@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { config } from '@/config/env';
 import { AppModule } from './app.module';
 
-const { PORT } = config;
+const { port } = config;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,8 +28,8 @@ async function bootstrap() {
 
   app.enableCors();
 
-  await app.listen(PORT, async () => {
-    console.log(`Server listening on: { PORT: ${PORT} }`);
+  await app.listen(port, async () => {
+    console.log(`Server listening on PORT ${port}`);
   });
 }
 bootstrap();

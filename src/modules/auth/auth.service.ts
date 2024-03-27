@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { config } from '@/config/env';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto';
 import { TokenPayload } from './interfaces';
@@ -41,15 +42,15 @@ export class AuthService {
 
   async createAccessToken(payload: TokenPayload) {
     return this.jwtService.signAsync(payload, {
-      secret: 'JWT_SECRET_KEY',
-      expiresIn: '1h',
+      secret: config.jwt.secret_key,
+      expiresIn: config.jwt.token_expire_time,
     });
   }
 
   async createRefreshToken(payload: TokenPayload) {
     return this.jwtService.signAsync(payload, {
-      secret: 'JWT_SECRET_REFRESH_KEY',
-      expiresIn: '24h',
+      secret: config.jwt.secret_refresh_key,
+      expiresIn: config.jwt.token_refresh_expire_time,
     });
   }
 
