@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RouterModule } from '@nestjs/core';
+import { APP_GUARD, RouterModule } from '@nestjs/core';
 import { dataSourceOptions } from '@/config/datasource';
 import { Routes } from '@/config/routes';
 import { AuthModule } from '@/modules/auth/auth.module';
@@ -12,6 +12,7 @@ import { FavoritesModule } from '@/modules/favorites/favorites.module';
 import { FavoritesTrackModule } from '@/modules/favorites/track/favorites-track.module';
 import { FavoritesArtistModule } from '@/modules/favorites/artist/favorites-artist.module';
 import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.module';
+import { AuthGuard } from './modules/auth/guards';
 
 @Module({
   imports: [
@@ -53,6 +54,12 @@ import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.
         ],
       },
     ]),
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}

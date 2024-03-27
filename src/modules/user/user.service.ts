@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { hash, compare } from 'bcrypt';
 import { TransformPlainToInstance } from 'class-transformer';
 import { User } from './entities';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
@@ -16,8 +17,10 @@ export class UserService {
   ) {}
 
   @TransformPlainToInstance(User)
-  async create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+  async create({ login, password }: CreateUserDto) {
+    const hashedPassword = await hash(password, 10);
+
+    return this.userRepository.save({ login, password: hashedPassword });
   }
 
   @TransformPlainToInstance(User)
@@ -36,6 +39,17 @@ export class UserService {
     return user;
   }
 
+  async findByCredentials({ login, password }: CreateUserDto) {
+    const user = await this.userRepository.findOne({ where: { login } });
+    const isValidPassword = await compare(password, user?.password);
+
+    if (!user || !isValidPassword) {
+      throw new ForbiddenException('Invalid User Credentials');
+    }
+
+    return user;
+  }
+
   @TransformPlainToInstance(User)
   async update(id: string, { newPassword, oldPassword }: UpdatePasswordDto) {
     const user = await this.userRepository.findOne({ where: { id } });
@@ -44,13 +58,17 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.password !== oldPassword) {
+    const isValidOldPassword = await compare(oldPassword, user.password);
+
+    if (!isValidOldPassword) {
       throw new ForbiddenException('Wrong old password');
     }
 
+    const newHashedPassword = await hash(newPassword, 10);
+
     return this.userRepository.save({
       ...user,
-      password: newPassword,
+      password: newHashedPassword,
     });
   }
 
