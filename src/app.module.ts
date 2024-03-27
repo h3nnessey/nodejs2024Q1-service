@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RouterModule } from '@nestjs/core';
 import { dataSourceOptions } from '@/config/datasource';
 import { Routes } from '@/config/routes';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { UserModule } from '@/modules/user/user.module';
 import { TrackModule } from '@/modules/track/track.module';
 import { ArtistModule } from '@/modules/artist/artist.module';
@@ -18,6 +19,7 @@ import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.
       ...dataSourceOptions,
       synchronize: false,
     }),
+    AuthModule,
     UserModule,
     TrackModule,
     ArtistModule,
@@ -27,6 +29,7 @@ import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.
     FavoritesArtistModule,
     FavoritesAlbumModule,
     RouterModule.register([
+      { path: Routes.Auth, module: AuthModule },
       { path: Routes.Users, module: UserModule },
       { path: Routes.Tracks, module: TrackModule },
       { path: Routes.Artists, module: ArtistModule },
