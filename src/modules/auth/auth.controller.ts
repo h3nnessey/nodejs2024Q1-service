@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -30,6 +37,7 @@ export class AuthController {
     description: 'Invalid data in body',
   })
   @Post('signup')
+  @HttpCode(HttpStatus.OK)
   async signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.signup(createUserDto);
   }
@@ -49,6 +57,7 @@ export class AuthController {
     description: 'Login failed',
   })
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   async login(@Body() credentials: CreateUserDto) {
     return this.authService.login(credentials);
   }
@@ -70,6 +79,7 @@ export class AuthController {
   })
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
+  @HttpCode(HttpStatus.OK)
   async refresh(@Body() payload: TokenPayload) {
     return this.authService.refresh(payload);
   }

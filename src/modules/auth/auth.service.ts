@@ -37,7 +37,11 @@ export class AuthService {
   }
 
   async refresh(payload: TokenPayload) {
-    return this.createTokensPair(payload);
+    const { id: userId, login } = await this.userService.findOne(
+      payload.userId,
+    );
+
+    return this.createTokensPair({ userId, login });
   }
 
   async createAccessToken(payload: TokenPayload) {

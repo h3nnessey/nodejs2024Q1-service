@@ -22,14 +22,14 @@ export class RefreshTokenGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync<TokenPayload>(
+      const { userId, login } = await this.jwtService.verifyAsync<TokenPayload>(
         refreshToken,
         {
           secret: config.jwt.secret_refresh_key,
         },
       );
 
-      request.body = { userId: payload.userId, login: payload.login };
+      request.body = { userId, login };
     } catch {
       throw new ForbiddenException('Refresh token is invalid or expired');
     }
