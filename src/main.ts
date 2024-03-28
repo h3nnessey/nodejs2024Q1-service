@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { config } from '@/config/env';
-import { AppModule } from './app.module';
+import { AllExceptionsFilter } from '@/common/filters/';
+import { AppModule } from '@/app.module';
 
 const { port } = config;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   const config = new DocumentBuilder()
     .setTitle('Home Library Service API')
     .setDescription('Home music library service')
@@ -39,6 +39,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   app.enableCors();
 
