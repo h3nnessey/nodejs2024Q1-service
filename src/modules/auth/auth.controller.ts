@@ -1,6 +1,7 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
@@ -12,7 +13,7 @@ import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from './guards';
 import { TokenPayload } from './interfaces';
 import { Public } from './decorators';
-import { AuthTokensResponse, SignUpResponse } from './dto';
+import { AuthTokensResponse, RefreshTokenDto, SignUpResponse } from './dto';
 
 @ApiTags('Authorization')
 @Public()
@@ -56,6 +57,7 @@ export class AuthController {
     summary: 'Refresh token',
     description: 'Refresh token',
   })
+  @ApiBody({ type: RefreshTokenDto })
   @ApiOkResponse({
     type: AuthTokensResponse,
     description: 'Successful token refresh',
