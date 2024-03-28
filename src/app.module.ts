@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_GUARD, RouterModule } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
+import { LoggingInterceptor } from '@/common/interceptors/';
 import { dataSourceOptions } from '@/config/datasource';
 import { Routes } from '@/config/routes';
 import { AuthModule } from '@/modules/auth/auth.module';
@@ -19,6 +20,10 @@ import { AccessTokenGuard } from '@/modules/auth/guards';
     {
       provide: APP_GUARD,
       useClass: AccessTokenGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
   imports: [
