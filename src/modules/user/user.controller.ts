@@ -19,6 +19,7 @@ import {
   ApiNoContentResponse,
 } from '@nestjs/swagger';
 import {
+  ApiBearerControl,
   ApiInvalidBodyResponse,
   ApiInvalidUuidResponse,
   ApiUuidParam,
@@ -29,6 +30,7 @@ import { CreateUserDto, UpdatePasswordDto, UpdatedUserDto } from './dto';
 import { User } from './entities';
 
 @ApiTags('Users')
+@ApiBearerControl()
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}

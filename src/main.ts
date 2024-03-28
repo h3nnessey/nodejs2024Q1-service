@@ -13,11 +13,25 @@ async function bootstrap() {
     .setTitle('Home Library Service API')
     .setDescription('Home music library service')
     .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('doc', app, document, {
+    swaggerOptions: {
+      security: [{ bearer: [] }],
+    },
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({

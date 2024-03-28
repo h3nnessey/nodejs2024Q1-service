@@ -29,7 +29,7 @@ export class AccessTokenGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('No Bearer Token');
     }
 
     try {
@@ -37,7 +37,7 @@ export class AccessTokenGuard implements CanActivate {
         secret: config.jwt.secret_key,
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid Access Token');
     }
     return true;
   }

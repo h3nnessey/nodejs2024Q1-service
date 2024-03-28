@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  ApiBearerControl,
   ApiInvalidBodyResponse,
   ApiInvalidUuidResponse,
   ApiUuidParam,
@@ -28,6 +29,7 @@ import { CreateAlbumDto, UpdateAlbumDto } from './dto';
 import { Album } from './entities';
 
 @ApiTags('Albums')
+@ApiBearerControl()
 @Controller()
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}

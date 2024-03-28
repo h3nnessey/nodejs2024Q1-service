@@ -14,11 +14,16 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import { ApiInvalidUuidResponse, ApiUuidParam } from '@/common/swagger';
+import {
+  ApiBearerControl,
+  ApiInvalidUuidResponse,
+  ApiUuidParam,
+} from '@/common/swagger';
 import { ParseUUIDv4Pipe } from '@/common/pipes';
 import { FavoritesAlbumService } from './favorites-album.service';
 
 @ApiTags('Favorites')
+@ApiBearerControl()
 @Controller()
 export class FavoritesAlbumController {
   constructor(private readonly favoritesAlbumService: FavoritesAlbumService) {}
