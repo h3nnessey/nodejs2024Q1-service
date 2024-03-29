@@ -4,6 +4,7 @@ import { APP_GUARD, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { LoggingInterceptor } from '@/common/interceptors/';
 import { dataSourceOptions } from '@/config/datasource';
 import { Routes } from '@/config/routes';
+import { LoggingModule } from '@/common/logger/logger.module';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { UserModule } from '@/modules/user/user.module';
 import { TrackModule } from '@/modules/track/track.module';
@@ -31,6 +32,7 @@ import { AccessTokenGuard } from '@/modules/auth/guards';
       ...dataSourceOptions,
       synchronize: false,
     }),
+    LoggingModule,
     AuthModule,
     UserModule,
     TrackModule,
