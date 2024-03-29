@@ -4,28 +4,33 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger();
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+    const res = ctx.getResponse<Response>();
+    const req = ctx.getRequest<Request>();
 
-    const { status, body } = this.createErrorResponse(exception, request.url);
+    const body = this.createErrorResponse(exception, req.url);
 
-    response.status(status).json(body);
+    this.logger.error(
+      `\x1b[31m${body.statusCode}\x1b[0m ${req.method} ${req.url} ${body.error} ${body.message}`,
+    );
+
+    res.status(body.statusCode).json(body);
   }
 
   private createErrorResponse(exception: unknown, url: string) {
-    const status = HttpStatus.INTERNAL_SERVER_ERROR;
-
     const defaultBody = {
       message: 'Internal Server Error',
       error: 'Unknown Error',
-      statusCode: status,
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
     };
 
     const meta = {
@@ -37,20 +42,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const exceptionBody = exception.getResponse();
 
       return {
-        status: exception.getStatus(),
-        body: {
-          ...(exceptionBody instanceof Object ? exceptionBody : defaultBody),
-          ...meta,
-        },
+        ...(exceptionBody instanceof Object
+          ? (exceptionBody as typeof defaultBody)
+          : defaultBody),
+        ...meta,
       };
     }
 
     return {
-      status,
-      body: {
-        ...defaultBody,
-        ...meta,
-      },
+      ...defaultBody,
+      ...meta,
     };
   }
 }
