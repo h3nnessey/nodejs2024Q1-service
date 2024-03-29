@@ -43,6 +43,18 @@ async function bootstrap() {
   app.useLogger(logger);
   app.enableCors();
 
+  process.on('uncaughtException', (err, origin) => {
+    logger.fatal(
+      `Uncaught Exception. Origin: ${origin}, Error: ${err.name}, Message: ${err.message}, Stack: ${JSON.stringify(err.stack)}`,
+    );
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.fatal(
+      `Unhandled Rejection. Reason: ${JSON.stringify(reason)}, Promise: ${JSON.stringify(promise)}`,
+    );
+  });
+
   await app.listen(port, async () => {
     logger.log(`Server listening on PORT ${port}`);
   });
