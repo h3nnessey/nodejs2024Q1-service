@@ -1,11 +1,9 @@
 import { ConsoleLogger, Injectable, LoggerService } from '@nestjs/common';
 
 @Injectable()
-export class LoggingService implements LoggerService {
-  private readonly logger: ConsoleLogger;
-
+export class LoggingService extends ConsoleLogger implements LoggerService {
   constructor() {
-    this.logger = new ConsoleLogger('Logger', {
+    super('Logger', {
       // error => warn => log => debug => verbose (probably cannot disable fatal)
       logLevels: ['verbose'],
       timestamp: true,
@@ -13,24 +11,24 @@ export class LoggingService implements LoggerService {
   }
 
   log(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.log(message, ...optionalParams);
+    super.log(message, ...optionalParams);
   }
   error(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.error(message, ...optionalParams);
+    super.error(message, ...optionalParams);
   }
   warn(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.warn(message, ...optionalParams);
+    super.warn(message, ...optionalParams);
   }
 
-  debug?(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.debug(message, ...optionalParams);
+  debug(message: unknown, ...optionalParams: unknown[]) {
+    super.debug(message, ...optionalParams);
   }
 
-  verbose?(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.verbose(message, ...optionalParams);
+  verbose(message: unknown, ...optionalParams: unknown[]) {
+    super.verbose(message, ...optionalParams);
   }
 
-  fatal?(message: unknown, ...optionalParams: unknown[]) {
-    this.logger.fatal(message, ...optionalParams);
+  fatal(message: unknown, ...optionalParams: unknown[]) {
+    super.fatal(message, ...optionalParams);
   }
 }

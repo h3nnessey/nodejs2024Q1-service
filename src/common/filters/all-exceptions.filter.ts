@@ -22,7 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const body = this.createErrorResponse(exception, req.url);
 
-    this.logger.fatal(
+    this.logger.error(
       `${req.method} ${req.url} ${body.statusCode} ${body.error} ${body.message}`,
     );
 

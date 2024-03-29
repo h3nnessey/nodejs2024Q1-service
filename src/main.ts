@@ -44,7 +44,7 @@ async function bootstrap() {
   app.enableCors();
 
   await app.listen(port, async () => {
-    logger.debug(`Server listening on PORT ${port}`);
+    logger.log(`Server listening on PORT ${port}`);
   });
 }
 bootstrap();
