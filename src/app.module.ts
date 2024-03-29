@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_GUARD, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
+import {
+  APP_FILTER,
+  APP_GUARD,
+  APP_INTERCEPTOR,
+  RouterModule,
+} from '@nestjs/core';
 import { LoggingInterceptor } from '@/common/interceptors/';
 import { dataSourceOptions } from '@/config/datasource';
 import { Routes } from '@/config/routes';
@@ -15,6 +20,7 @@ import { FavoritesTrackModule } from '@/modules/favorites/track/favorites-track.
 import { FavoritesArtistModule } from '@/modules/favorites/artist/favorites-artist.module';
 import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.module';
 import { AccessTokenGuard } from '@/modules/auth/guards';
+import { AllExceptionsFilter } from './common/filters';
 
 @Module({
   providers: [
@@ -25,6 +31,10 @@ import { AccessTokenGuard } from '@/modules/auth/guards';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
   imports: [

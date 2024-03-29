@@ -3,7 +3,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { config } from '@/config/env';
 import { LoggingService } from '@/common/logger/logger.service';
-import { AllExceptionsFilter } from '@/common/filters/';
 import { AppModule } from '@/app.module';
 
 const { port } = config;
@@ -41,12 +40,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalFilters(new AllExceptionsFilter());
   app.useLogger(logger);
   app.enableCors();
 
   await app.listen(port, async () => {
-    console.log(`Server listening on PORT ${port}`);
+    logger.debug(`Server listening on PORT ${port}`);
   });
 }
 bootstrap();

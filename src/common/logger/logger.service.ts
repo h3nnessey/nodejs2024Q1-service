@@ -1,26 +1,36 @@
-import { Injectable, LogLevel, LoggerService } from '@nestjs/common';
+import { ConsoleLogger, Injectable, LoggerService } from '@nestjs/common';
 
 @Injectable()
 export class LoggingService implements LoggerService {
-  log(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+  private readonly logger: ConsoleLogger;
+
+  constructor() {
+    this.logger = new ConsoleLogger('Logger', {
+      // error => warn => log => debug => verbose (probably cannot disable fatal)
+      logLevels: ['verbose'],
+      timestamp: true,
+    });
   }
-  error(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+
+  log(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.log(message, ...optionalParams);
   }
-  warn(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+  error(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.error(message, ...optionalParams);
   }
-  debug?(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+  warn(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.warn(message, ...optionalParams);
   }
-  verbose?(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+
+  debug?(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.debug(message, ...optionalParams);
   }
-  fatal?(message: any, ...optionalParams: any[]) {
-    console.log('Method not implemented.');
+
+  verbose?(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.verbose(message, ...optionalParams);
   }
-  setLogLevels?(levels: LogLevel[]) {
-    console.log('Method not implemented.');
+
+  fatal?(message: unknown, ...optionalParams: unknown[]) {
+    this.logger.fatal(message, ...optionalParams);
   }
 }
