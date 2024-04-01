@@ -1,13 +1,16 @@
 import { ConsoleLogger, Injectable, LoggerService } from '@nestjs/common';
 import { config } from '@/config/env';
+import { FileLoggerService } from '../file-logger/file-logger.service';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
-  constructor() {
+  constructor(private readonly fileLogger: FileLoggerService) {
     super('Logger', {
       logLevels: [config.logLevel],
       timestamp: true,
     });
+
+    this.fileLogger.log('test');
   }
 
   log(message: unknown, ...optionalParams: unknown[]) {
