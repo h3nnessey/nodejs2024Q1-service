@@ -55,6 +55,7 @@ npm run start docker:migration:migrate
 ```
 
 ## Logs
+ - You can also use Docker Desktop app to see logs. Open Docker Desktop -> Volumes -> logs (double-click on filename to open)
 
 ```bash
 # view logs directory information
