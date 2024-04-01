@@ -34,7 +34,7 @@ export const config = {
   },
   logs: {
     level: getLogLevel(parseInt(process.env.LOG_LEVEL, 10) || 2),
-    dir: process.env.LOGS_DIR || 'logs',
+    dir: 'logs',
     fileSize: parseInt(process.env.LOG_FILE_SIZE, 10) || 50,
   },
 };
