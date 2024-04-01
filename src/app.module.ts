@@ -7,9 +7,10 @@ import {
   RouterModule,
 } from '@nestjs/core';
 import { LoggingInterceptor } from '@/common/interceptors/';
+import { AllExceptionsFilter } from '@/common/filters';
 import { dataSourceOptions } from '@/config/datasource';
-import { Routes } from '@/config/routes';
 import { LoggingModule } from '@/common/logger/logger.module';
+import { Routes } from '@/config/routes';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { UserModule } from '@/modules/user/user.module';
 import { TrackModule } from '@/modules/track/track.module';
@@ -20,7 +21,6 @@ import { FavoritesTrackModule } from '@/modules/favorites/track/favorites-track.
 import { FavoritesArtistModule } from '@/modules/favorites/artist/favorites-artist.module';
 import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.module';
 import { AccessTokenGuard } from '@/modules/auth/guards';
-import { AllExceptionsFilter } from './common/filters';
 
 @Module({
   providers: [

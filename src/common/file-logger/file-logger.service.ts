@@ -30,15 +30,15 @@ export class FileLoggerService implements LoggerService {
     this.writeErrorLog(message);
   }
 
-  async writeLog(message: unknown) {
+  private async writeLog(message: unknown) {
     await this.write({ type: 'common', message });
   }
 
-  async writeErrorLog(message: unknown) {
+  private async writeErrorLog(message: unknown) {
     await this.write({ type: 'error', message });
   }
 
-  async write({
+  private async write({
     type,
     message,
   }: {
@@ -79,6 +79,6 @@ export class FileLoggerService implements LoggerService {
   }
 
   private createLogMessage(message: unknown) {
-    return new Date().toISOString() + ' ' + JSON.stringify(message) + EOL;
+    return `${new Date().toISOString()} ${JSON.stringify(message)}${EOL}`;
   }
 }
