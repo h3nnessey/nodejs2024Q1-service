@@ -5,8 +5,8 @@ const logLevels: LogLevel[] = [
   'verbose',
   'debug',
   'log',
-  'error',
   'warn',
+  'error',
   'fatal',
 ];
 
@@ -33,7 +33,7 @@ export const config = {
     crypt_salt: parseInt(process.env.CRYPT_SALT, 10) || 10,
   },
   logs: {
-    level: getLogLevel(parseInt(process.env.LOG_LEVEL, 10) || 2),
+    level: getLogLevel(parseInt(process.env.LOG_LEVEL, 10)),
     dir: 'logs',
     fileSize: parseInt(process.env.LOG_FILE_SIZE, 10) || 50,
   },
