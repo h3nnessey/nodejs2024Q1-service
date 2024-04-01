@@ -32,5 +32,9 @@ export const config = {
   hash: {
     crypt_salt: parseInt(process.env.CRYPT_SALT, 10) || 10,
   },
-  logLevel: getLogLevel(parseInt(process.env.LOG_LEVEL, 10) || 2),
+  logs: {
+    level: getLogLevel(parseInt(process.env.LOG_LEVEL, 10) || 2),
+    dir: process.env.LOGS_DIR || 'logs',
+    fileSize: parseInt(process.env.LOG_FILE_SIZE, 10) || 50,
+  },
 };
