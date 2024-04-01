@@ -23,7 +23,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const body = this.createErrorResponse(exception, req.url);
 
     this.logger.error(
-      `${req.method} ${req.url} ${body.statusCode} ${body.error} ${body.message}`,
+      `[RESPONSE] Client: ${req.ip} | ${req.method} ${req.originalUrl} | Status code: ${body.statusCode} | Error: ${body.error} | Message: ${body.message}`,
     );
 
     res.status(body.statusCode).json(body);

@@ -5,7 +5,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Request, Response } from 'express';
 import { LoggingService } from '../logger/logger.service';
 
@@ -21,9 +21,15 @@ export class LoggingInterceptor implements NestInterceptor {
     const res = ctx.getResponse<Response>();
 
     this.logger.log(
-      `${req.method} ${req.url} ${res.statusCode} query: ${JSON.stringify(req.query)} body: ${JSON.stringify(req.body)}`,
+      `[REQUEST] Client: ${req.ip} |  ${req.method} ${req.url} | Query: ${JSON.stringify(req.query)} | Body: ${JSON.stringify(req.body)}`,
     );
 
-    return next.handle();
+    return next.handle().pipe(
+      tap(() => {
+        this.logger.log(
+          `[RESPONSE] Client: ${req.ip} | ${req.method} ${req.originalUrl} | Status code: ${res.statusCode}`,
+        );
+      }),
+    );
   }
 }

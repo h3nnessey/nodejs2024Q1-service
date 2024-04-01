@@ -45,13 +45,13 @@ async function bootstrap() {
 
   process.on('uncaughtException', (err, origin) => {
     logger.fatal(
-      `Uncaught Exception. Origin: ${origin}, Error: ${err.name}, Message: ${err.message}, Stack: ${JSON.stringify(err.stack)}`,
+      `[Uncaught Exception] Origin: ${origin} | Error: ${err.name} | Message: ${err.message} | Stack: ${JSON.stringify(err.stack)}`,
     );
   });
 
   process.on('unhandledRejection', (reason, promise) => {
     logger.fatal(
-      `Unhandled Rejection. Reason: ${JSON.stringify(reason)}, Promise: ${JSON.stringify(promise)}`,
+      `[Unhandled Rejection] Reason: ${JSON.stringify(reason)} | Promise: ${JSON.stringify(promise)}`,
     );
   });
 

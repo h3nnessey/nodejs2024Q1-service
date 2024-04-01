@@ -72,7 +72,7 @@ export class FileLoggerService implements LoggerService {
     try {
       const stats = await stat(path);
 
-      return stats.size / 1000 >= config.logs.fileSize;
+      return stats.size / 1024 >= config.logs.fileSize;
     } catch {
       return false;
     }
