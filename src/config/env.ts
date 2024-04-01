@@ -1,4 +1,18 @@
+import { LogLevel } from '@nestjs/common';
 import 'dotenv/config';
+
+const logLevels: LogLevel[] = [
+  'verbose',
+  'debug',
+  'log',
+  'error',
+  'warn',
+  'fatal',
+];
+
+const getLogLevel = (level: number): LogLevel => {
+  return (logLevels[level] as LogLevel) || 'log';
+};
 
 export const config = {
   port: parseInt(process.env.PORT, 10) || 5000,
@@ -18,4 +32,5 @@ export const config = {
   hash: {
     crypt_salt: parseInt(process.env.CRYPT_SALT, 10) || 10,
   },
+  logLevel: getLogLevel(parseInt(process.env.LOG_LEVEL, 10) || 2),
 };

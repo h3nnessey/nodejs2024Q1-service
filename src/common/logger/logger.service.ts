@@ -1,11 +1,11 @@
 import { ConsoleLogger, Injectable, LoggerService } from '@nestjs/common';
+import { config } from '@/config/env';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
   constructor() {
     super('Logger', {
-      // error => warn => log => debug => verbose (probably cannot disable fatal)
-      logLevels: ['verbose'],
+      logLevels: [config.logLevel],
       timestamp: true,
     });
   }
@@ -13,9 +13,11 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
   log(message: unknown, ...optionalParams: unknown[]) {
     super.log(message, ...optionalParams);
   }
+
   error(message: unknown, ...optionalParams: unknown[]) {
     super.error(message, ...optionalParams);
   }
+
   warn(message: unknown, ...optionalParams: unknown[]) {
     super.warn(message, ...optionalParams);
   }
