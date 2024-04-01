@@ -24,10 +24,12 @@
     "migration:generate": "npm run build && npm run typeorm migration:generate -- -d src/config/datasource.ts src/migrations/generated",
     "migration:migrate": "npm run build && npm run typeorm migration:run -- -d src/config/datasource.ts",
     "migration:create": "npm run build && npm run typeorm migration:create src/migrations/template",
-    "docker:migration:generate": "docker-compose exec rest-service npm run migration:generate",
-    "docker:migration:migrate": "docker-compose exec rest-service npm run migration:migrate",
-    "docker:migration:create": "docker-compose exec rest-service npm run migration:create",
-    "docker:scout": "docker login && docker scout cves h3nnessey/rest-service && docker scout cves h3nnessey/postgres"
+    "docker:migration:generate": "docker compose exec rest-service npm run migration:generate",
+    "docker:migration:migrate": "docker compose exec rest-service npm run migration:migrate",
+    "docker:migration:create": "docker compose exec rest-service npm run migration:create",
+    "docker:scout": "docker login && docker scout cves h3nnessey/rest-service && docker scout cves h3nnessey/postgres",
+    "docker:logs": "docker compose exec rest-service ls -ls ./logs",
+    "docker:logs:read": "docker compose exec rest-service cat"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",

@@ -1,8 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RouterModule } from '@nestjs/core';
+import {
+  APP_FILTER,
+  APP_GUARD,
+  APP_INTERCEPTOR,
+  RouterModule,
+} from '@nestjs/core';
+import { LoggingInterceptor } from '@/common/interceptors/';
+import { AllExceptionsFilter } from '@/common/filters';
 import { dataSourceOptions } from '@/config/datasource';
+import { LoggingModule } from '@/common/logger/logger.module';
 import { Routes } from '@/config/routes';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { UserModule } from '@/modules/user/user.module';
 import { TrackModule } from '@/modules/track/track.module';
 import { ArtistModule } from '@/modules/artist/artist.module';
@@ -11,13 +20,30 @@ import { FavoritesModule } from '@/modules/favorites/favorites.module';
 import { FavoritesTrackModule } from '@/modules/favorites/track/favorites-track.module';
 import { FavoritesArtistModule } from '@/modules/favorites/artist/favorites-artist.module';
 import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.module';
+import { AccessTokenGuard } from '@/modules/auth/guards';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
   imports: [
     TypeOrmModule.forRoot({
       ...dataSourceOptions,
       synchronize: false,
     }),
+    LoggingModule,
+    AuthModule,
     UserModule,
     TrackModule,
     ArtistModule,
@@ -27,6 +53,7 @@ import { FavoritesAlbumModule } from '@/modules/favorites/album/favorites-album.
     FavoritesArtistModule,
     FavoritesAlbumModule,
     RouterModule.register([
+      { path: Routes.Auth, module: AuthModule },
       { path: Routes.Users, module: UserModule },
       { path: Routes.Tracks, module: TrackModule },
       { path: Routes.Artists, module: ArtistModule },

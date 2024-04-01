@@ -21,7 +21,6 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  // stack over flow
   "watchOptions": {
     "watchFile": "priorityPollingInterval",
     "watchDirectory": "dynamicprioritypolling",

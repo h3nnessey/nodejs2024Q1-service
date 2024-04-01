@@ -42,7 +42,7 @@ docker login
 
 ```bash
 # detached mod
-docker-compose up -d
+docker compose up -d
 
 # view active containers
 docker ps
@@ -52,6 +52,23 @@ docker images
 
 # create tables in postgresql based on initial migrations and app is ready to work now
 npm run start docker:migration:migrate
+```
+
+## Logs
+ - You can also use Docker Desktop app to see logs. Open Docker Desktop -> Volumes -> logs (double-click on filename to open)
+
+```bash
+# view logs directory information
+
+# output example where 51241, 18688, 31878 file size in bytes
+
+# 52 -rw-r--r-- 1 h3nnessey 197121 51241 Apr  1 19:55 1711983304505_common-logs.txt
+# 20 -rw-r--r-- 1 h3nnessey 197121 18688 Apr  1 19:55 common-logs.current.txt
+# 32 -rw-r--r-- 1 h3nnessey 197121 31878 Apr  1 19:55 error-logs.current.txt
+npm run docker:logs
+
+# read specified log file (replace <filename> with filename of log file)
+npm run docker:logs:read ./logs/<filename>
 ```
 
 ## Docker scout (vulnerability check)
@@ -64,8 +81,8 @@ npm run docker:scout
 ## Testing
 
 ```bash
-# To run all tests
-npm run test
+# To run auth tests
+npm run test:auth
 
 # To run only one of all test suites
 npm run test -- <path to suite>

@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  ApiBearerControl,
   ApiInvalidBodyResponse,
   ApiInvalidUuidResponse,
   ApiUuidParam,
@@ -28,6 +29,7 @@ import { CreateArtistDto, UpdateArtistDto } from './dto';
 import { Artist } from './entities';
 
 @ApiTags('Artists')
+@ApiBearerControl()
 @Controller()
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}

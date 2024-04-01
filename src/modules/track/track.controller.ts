@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  ApiBearerControl,
   ApiInvalidBodyResponse,
   ApiInvalidUuidResponse,
   ApiUuidParam,
@@ -28,6 +29,7 @@ import { CreateTrackDto, UpdateTrackDto } from './dto';
 import { Track } from './entities';
 
 @ApiTags('Tracks')
+@ApiBearerControl()
 @Controller()
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
